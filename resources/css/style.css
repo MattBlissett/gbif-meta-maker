@@ -1,0 +1,217 @@
+
+.meta {
+	font-size: 12px
+}
+
+.header {
+	height: 94px;
+	background: no-repeat url(../images/header-photos.jpg);
+	background-position: 440px;
+}
+
+
+.about {
+	padding: 10px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+.about blockquote {
+	display: block;
+	margin-left: 40px;
+}
+
+.definition:nth-child(even) {
+	background-color:#FFFFFF;
+	border:thin solid #CCCCCC;
+	margin-bottom:5px;
+	padding:5px;
+}
+
+.definition:nth-child(odd) {
+	background-color:#F3F3F3;
+	border:thin solid #F3F3F3;
+	margin-bottom:5px;
+	padding:5px;
+}
+
+.about ul {
+	margin-left: 40px;
+	list-style: circle;
+}
+
+.about li {
+	display: list-item;	
+	margin-top: 5px;
+}
+
+.glossary-header{
+	background-color: #FFFFFF;	
+}
+
+.gbif {
+	float: left;
+	margin-left: 15px;
+}
+
+.header-text {
+	font-family: Arial, Helvetica, sans-serif;
+	padding-top: 40px;
+}
+
+
+.refLinksWrapper {
+	height: 0px;
+	overflow: hidden;
+}
+
+.refArrowClosed {
+	background-image: url(../images/default/tree/arrows.gif);
+	cursor: pointer;
+	background-repeat: no-repeat;
+	border:0 none;
+	height:18px;
+	margin:0;
+	padding:0;
+	vertical-align: top;
+	width:16px;	
+	-moz-user-select: none;
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+/*	background:transparent none no-repeat scroll 0 0;	*/
+}
+
+.refArrowOpen {
+	background-position: -16px;
+}
+
+.linkTxt {
+	font-size: 12px;
+}
+
+.info {
+	padding: 10px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	background-color: #FAFAFA;
+}
+
+.terms {
+	padding: 10px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+}
+
+.highlight1 {
+	background-color: #0F0;
+}
+.highlight2 {
+	background-color: #FF6;
+}
+.highlight3 {
+	background-color: #C9F;
+}
+.highlight4 {
+	background-color: #CFF;
+}
+.highlight5 {
+	background-color: #6FF;
+}
+
+.iconText {
+  background-image:url(../images/icons/page_white_text.png) !important;
+}
+
+.iconTextSyn {
+  background-image:url(../images/icons/page_white_text_syn.png) !important;
+}
+
+.iconAbout {
+  background-image:url(../images/icons/information.png) !important;
+}
+
+.iconSearch {
+  background-image:url(../images/icons/magnifier.png) !important;
+}
+
+.iconBook {
+  background-image:url(../images/icons/book.png) !important;
+}
+
+.iconBookOpen {
+  background-image:url(../images/icons/book_open.png) !important;
+}
+
+.iconPageWhiteCode {
+	background-image:url(../images/icons/page_white_code.png) !important;
+}
+
+.section {
+	margin-top: 10px;
+}
+
+.section b {
+	font-weight: bold;
+}
+
+.termRow {
+	border: thin solid #060;
+	padding: 5px;
+	background-color: #F3F3F3;
+	margin-top: 10px;
+}
+
+.relatedWrapper ul {
+	list-style-image: url(../images/icons/page_white_text.png);
+	margin-left: 10px;
+	list-style-position:inside;
+}
+
+.relatedWrapper {
+	margin: 10px 0 0 10px;
+	padding-left: 3px;
+	font-size: 12px;
+}
+
+.codeStatus {
+	font-size: 12px;
+	font-style: italic;
+}
+
+.refLink {
+	color:#060;
+	font-style: italic;
+	font-size: 11px;
+	margin-top: 5px;
+}
+
+em {
+	font-style: italic;
+}
+
+a:link {
+	color: #090;
+}
+a:visited {
+	color: #090;
+}
+a:hover {
+	color: #900;
+}
+a:active {
+	color: #090;
+}
+
+.x-tree-node .x-tree-selected {
+	background-color: #5D5 !important;
+}
+
+.x-form-focus, textarea.x-form-focus {
+	border-color:#090 !important;
+}
+
+.x-layout-collapsed {
+	background-color:#070;
+	border-color:#070;
+}
