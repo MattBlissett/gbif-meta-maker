@@ -52,7 +52,7 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 
 		testNodeUri: function( loader, node ) {
-			console.log('test', this, node, node.attributes.type );
+//			console.log('test', this, node, node.attributes.type );
 			switch (node.attributes.type) {
 				case 'root':
 					break;
@@ -114,7 +114,7 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 //				console.log( record.getAttribute("qualName") );
 //				console.log( record.getAttribute("columnLength") );
 //				console.log( record.getAttribute("thesaurus") );
-console.log( node, this );
+//console.log( node, this );
 				node.beginUpdate();
 				var n = this.createNode({});
 				n.text = record.getAttribute("name");
@@ -133,6 +133,6 @@ console.log( node, this );
 				}
 
 			}, this);
-			console.log(xml);
+//			console.log(xml);
 		}
 });

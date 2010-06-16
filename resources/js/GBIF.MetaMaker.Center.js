@@ -33,14 +33,14 @@ GBIF.MetaMaker.Center = function(config){
 Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 	
 		loadExtension: function( node ) {
-			console.log( this, node );
+//			console.log( this, node );
 		}
 
 	,	checkchange: function( node, value ) {
 			switch( node.attributes.type ) {
 				case 'core':
 					var activeCoreItem = this.extensionsTree.toggleCore( node.id );
-					console.log(activeCoreItem);
+//					console.log(activeCoreItem);
 					break;
 				default:
 					break;
