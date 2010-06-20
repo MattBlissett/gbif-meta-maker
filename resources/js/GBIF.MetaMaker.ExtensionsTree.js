@@ -52,13 +52,11 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 
 		testNodeUri: function( loader, node ) {
-//			console.log('test', this, node, node.attributes.type );
 			switch (node.attributes.type) {
 				case 'root':
 					break;
 				case 'extension':
-//					loader.dataUrl = node.attributes.url;
-					loader.dataUrl = 'sample.xml';
+					loader.dataUrl = 'resources/api/proxy.php?url=' + node.attributes.url;
 					loader.processResponse = this.extensionResponse;
 					break;
 			}
@@ -120,6 +118,7 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 				n.text = record.getAttribute("name");
 				n.leaf = true;
 				n.attributes.type = 'attribute';
+				n.attributes.term = record.getAttribute("name");
 				n.attributes.namespace = record.getAttribute("namespace");
 				n.attributes.qualName = record.getAttribute("qualName");
 				n.attributes.thesaurus = record.getAttribute("thesaurus");

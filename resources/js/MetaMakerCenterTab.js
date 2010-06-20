@@ -11,7 +11,7 @@ GBIF.MetaMakerCenterTab = function(config){
 	Ext.apply(this, config, {
 			width: 400
 		,	height: 400
-		,	activeTab: 1
+//		,	activeTab: 1
 		,	items: [
 					this.metaPanel
 //					this.vernacularNames
