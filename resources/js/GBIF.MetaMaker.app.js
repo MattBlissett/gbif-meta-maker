@@ -43,7 +43,7 @@ Ext.onReady(function() {
 		,	items:[
 					this.header
 				,	this.center
-				,	this.details
+//				,	this.details
 			]
 	});
 

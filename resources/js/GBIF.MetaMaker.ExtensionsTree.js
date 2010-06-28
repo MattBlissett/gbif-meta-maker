@@ -14,30 +14,34 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 							text: 'Core'
 						,	type: 'root'
 						,	expanded: true
+						,	iconCls: 'iconBook'
 						,	children: [{
 									text: 'Specimens'
 								,	id: 'specimens'
 								,	leaf: false
 								,	checked: true
 								,	type: 'core'
+								,	url: 'http://gbif-meta-maker.googlecode.com/svn/trunk/sample.xml'
 							}, {
 									text: 'Observations'
 								,	id: 'observations'
 								,	leaf: false
 								,	checked: false
 								,	type: 'core'
+								,	url: 'http://gbif-meta-maker.googlecode.com/svn/trunk/sample.xml'
 							}]
 					}, {
 							text: 'Extensions'
 						,	type: 'root'
 						,	expanded: true
+						,	iconCls: 'iconBook'
 					}]
 			})
 		,	useArrows: true
 		,	rootVisible: false
+		,	autoScroll: true
 		,	loader: new Ext.tree.TreeLoader({
-//					dataUrl: 'http://gbrds.gbif.org/registry/ipt/extensions.json'
-					dataUrl: 'extensions.json'
+					dataUrl: 'resources/api/proxy.php?url=http://gbrds.gbif.org/registry/ipt/extensions.json&type=json'
 				,	listeners: {
 							beforeload: this.testNodeUri
 						,	scope: this
@@ -55,6 +59,7 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 			switch (node.attributes.type) {
 				case 'root':
 					break;
+				case 'core':
 				case 'extension':
 					loader.dataUrl = 'resources/api/proxy.php?url=' + node.attributes.url;
 					loader.processResponse = this.extensionResponse;
@@ -88,6 +93,7 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 					n.leaf = false;
 					n.attributes.type = 'extension';
 					n.attributes.checked = false;
+					n.iconCls = 'iconText';
 					if (n) {
 						node.appendChild(n);
 					}
@@ -107,12 +113,6 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 			var root = xml.documentElement;
 			var q = Ext.DomQuery;
 			Ext.each( q.select("property", root), function( record ) {
-//				console.log( record.getAttribute("name") );
-//				console.log( record.getAttribute("namespace") );
-//				console.log( record.getAttribute("qualName") );
-//				console.log( record.getAttribute("columnLength") );
-//				console.log( record.getAttribute("thesaurus") );
-//console.log( node, this );
 				node.beginUpdate();
 				var n = this.createNode({});
 				n.text = record.getAttribute("name");
@@ -123,6 +123,7 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 				n.attributes.qualName = record.getAttribute("qualName");
 				n.attributes.thesaurus = record.getAttribute("thesaurus");
 				n.attributes.checked = false;
+				n.iconCls = 'iconText';
 				if (n) {
 					node.appendChild(n);
 				}
@@ -132,6 +133,5 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 				}
 
 			}, this);
-//			console.log(xml);
 		}
 });

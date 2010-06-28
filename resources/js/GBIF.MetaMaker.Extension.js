@@ -21,11 +21,15 @@ GBIF.MetaMaker.Extension = function(config){
 			]
 		,	stripeRows: true
 		,	title: 'Extension'
-
+		,	tbar: [{
+					text: 'Add Spacer'
+				,	handler: this.addSpacer
+				,	scope: this
+			}]
     ,	ddGroup: 'testDDGroup'
-    ,enableDragDrop: true
-    ,autoScroll: true
-    ,listeners: {
+    ,	enableDragDrop: true
+    ,	autoScroll: true
+    ,	listeners: {
         render: function(g) {
 					var ddrow = new Ext.ux.dd.GridReorderDropTarget(g, {
 							copy: false
@@ -61,5 +65,10 @@ GBIF.MetaMaker.Extension = function(config){
 
 }	
 
-Ext.extend(GBIF.MetaMaker.Extension, Ext.grid.GridPanel, {	
+Ext.extend(GBIF.MetaMaker.Extension, Ext.grid.GridPanel, {
+
+	addSpacer: function() {
+		this.store.loadData([["Spacer", "", false]], true );
+	}
+
 });

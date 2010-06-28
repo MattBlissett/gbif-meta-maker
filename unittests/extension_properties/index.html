@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>GBIF - MetaMaker</title>	
+	</head>
+<body>
+
+	<link rel="stylesheet" type="text/css" href="http://localhost/ext-3.2.1/resources/css/ext-all.css" />
+	<link rel="stylesheet" type="text/css" href="../../resources/css/xtheme-gray.css" />
+	<link rel="stylesheet" type="text/css" href="../../resources/css/style.css" />
+
+	<script type="text/javascript" src="http://localhost/ext-3.2.1/adapter/ext/ext-base.js"></script>
+	<script type="text/javascript" src="http://localhost/ext-3.2.1/ext-all.js"></script>
+	<script type="text/javascript" src="../../resources/js/GBIF.MetaMaker.Properties.js"></script>
+	<script type="text/javascript" src="../../resources/js/GBIF.MetaMaker.FileSettings.js"></script>
+	<script type="text/javascript">
+	Ext.namespace('GBIF');
+	
+	Ext.onReady(function() {
+
+		var fs = new GBIF.MetaMaker.FileSettings({
+				width: 300
+			,	height: 400																		 
+			,	renderTo: Ext.getBody()
+			,	style: "padding: 10px"
+		});
+		fs.prop.setCSV();
+
+	});
+	</script>
+</body>
+</html>

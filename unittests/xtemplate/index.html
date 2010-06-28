@@ -1,0 +1,35 @@
+<html>
+<head>
+	<script type="text/javascript" src="http://extjs.cachefly.net/ext-3.2.1/adapter/ext/ext-base.js"></script>
+	<script type="text/javascript" src="http://extjs.cachefly.net/ext-3.2.1/ext-all.js"></script>
+	<script type="text/javascript">
+	Ext.onReady(function() {
+
+		var data = {
+			extensions: []
+		}
+		
+		var tpl = new Ext.XTemplate(
+				'<div class="meta">&lt;?xml version="1.0"?&gt;<br/>'
+			,	'\t&lt;archive&gt;<br/>'
+
+			,	'<tpl for="extensions">'
+			,	'<tpl for="extensions2">'
+//			,	'<tpl if="extensions == undefined">'
+//			,	'<tpl if="extensions != 0">'
+			,	'</tpl>'
+			,	'</tpl>'
+
+			,	'\t&lt;/archive&gt;<br/>'
+			,	'</div>'
+		);
+		tpl.overwrite("tpl1", data);
+
+	});
+	</script>
+</head>
+
+<body>
+	<div id="tpl1"></div>
+</body>
+</html>

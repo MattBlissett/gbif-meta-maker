@@ -3,28 +3,77 @@ Ext.namespace('GBIF.MetaMaker');
 
 GBIF.MetaMaker.MetaPanel = function(config){
 
-	this.data = {
-			encoding: "UTF-8"
-		,	linesTerminatedBy: "\\r\\n"
-		,	fieldsTerminatedBy: "\\t"
-		,	fieldsEnclosedBy: ""
-		,	ignoreHeaderLines: 1
+	this.metaData = {
+			core: []
+		,	extensions: []
 	};
+
+	this.filename = new Ext.form.TextField({
+		width: 100
+	});
 
 	Ext.apply(this, config, {
 			height: 200
+		,	type: 'meta'
 		,	title: 'meta.xml'
 		,	iconCls: 'iconPageWhiteCode'
 		,	padding: 10
+		,	autoScroll: true
 		,	border: false
+		,	tbar: ["Filename:", this.filename ]
 		,	tpl: new Ext.XTemplate(
-					'<div class="meta">&lt;?xml version="1.0"?&gt;<br/>'
-				,	'\t&lt;archive xmlns="http://rs.tdwg.org/dwc/text/"&gt;<br/>'
-				,	'\t\t&lt;core encoding="{encoding}" linesTerminatedBy="{linesTerminatedBy}" fieldsTerminatedBy="{fieldsTerminatedBy}" fieldsEnclosedBy="{fieldsEnclosedBy}" ignoreHeaderLines="{ignoreHeaderLines}" rowType="{rowType}"&gt;'
+					'<pre><div class="meta">&lt;?xml version="1.0"?&gt;<br/>'
+				,	'&lt;archive xmlns="http://rs.tdwg.org/dwc/text/"&gt;<br/>'
+
+				,	'<tpl for="core">'
+				,	'\t&lt;core encoding="{encoding}" linesTerminatedBy="{linesTerminatedBy}" fieldsTerminatedBy="{fieldsTerminatedBy}" fieldsEnclosedBy="{fieldsEnclosedBy}" ignoreHeaderLines="{ignoreHeaderLines}" rowType="{rowType}"&gt;<br/>'
+				,		'\t\t&lt;files&gt;<br/>'
+				,			'\t\t\t&lt;location>{filename}&lt;/location&gt;<br/>'
+				,		'\t\t&lt;/files&gt;<br/>'
+				,		'<tpl for="fields">'
+				,			'<tpl if="xindex == 1">'
+				,				'\t\t&lt;coreid index="{#}"/&gt;<br/>'
+				,			'</tpl>'
+
+				,			'<tpl if="xindex &gt; 1">'
+				,				'\t\t&lt;field index="{#}" term="{term}"/&gt;<br/>'
+				,			'</tpl>'
+				,		'</tpl>'
+				,	'\t&lt;/core&gt;<br/>'
+				,	'</tpl>'
+
+
+
+				,	'<tpl for="extensions">'
+				,	'\t&lt;extension encoding="{encoding}" linesTerminatedBy="{linesTerminatedBy}" fieldsTerminatedBy="{fieldsTerminatedBy}" fieldsEnclosedBy="{fieldsEnclosedBy}" ignoreHeaderLines="{ignoreHeaderLines}" rowType="{rowType}"&gt;<br/>'
+				,		'\t\t&lt;files&gt;<br/>'
+				,			'\t\t\t&lt;location>{filename}&lt;/location&gt;<br/>'
+				,		'\t\t&lt;/files&gt;<br/>'
+
+				,		'\t\t&lt;coreid index="0"/&gt;<br/>'
+
+				,		'<tpl for="fields">'
+				,			'<tpl if="term != \'Spacer\'">'
+				,					'\t\t&lt;field index="{#}" term="{term}"/&gt;<br/>'
+				,			'</tpl>'
+				,		'</tpl>'
+
+				,	'\t&lt;/extension&gt;<br/>'
+				,	'</tpl>'
+
+
+
+				,	'&lt;/archive&gt;<br/>'
 				,	'</div>'
+				,	{
+						exists: function(o){
+//console.log(o);
+								return typeof o != 'undefined' && o != null && o!='';
+						}
+					}
 			)
 		,	listeners: {
-				activate: this.generateXML
+//				activate: this.generateXML
 			}
 	})
 
@@ -34,7 +83,7 @@ GBIF.MetaMaker.MetaPanel = function(config){
 Ext.extend(GBIF.MetaMaker.MetaPanel, Ext.Panel, {
 
 	generateXML: function() {
-		this.tpl.overwrite(this.body, this.data);
+		this.tpl.overwrite(this.body, this.metaData);
 	}
 
 });
