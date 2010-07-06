@@ -8,13 +8,14 @@ GBIF.MetaMaker.CenterTab = function(config){
 			id: 'core-specimens'
 		,	title: 'Specimens'
 		,	type: 'core'
+		,	skip: false
 	});
 
 	this.coreObservationsPanel = new GBIF.MetaMaker.ExtensionPanel({
 			id: 'core-observations'
 		,	title: 'Observations'
 		,	type: 'core'
-		,	hidden: true
+		,	skip: true
 	});
 	
 	Ext.apply(this, config, {
@@ -27,10 +28,13 @@ GBIF.MetaMaker.CenterTab = function(config){
 				,	this.coreObservationsPanel
 			]
 		,	listeners: {
-				tabchange: this.checkTab
+					tabchange: this.checkTab
+				,	render: function() {
+						this.hideTabStripItem("core-observations");
+					}
 			}
 	});
-
+	
 	GBIF.MetaMaker.CenterTab.superclass.constructor.call(this, config);
 }	
 
@@ -45,35 +49,59 @@ Ext.extend(GBIF.MetaMaker.CenterTab,Ext.TabPanel,  {
 					panel.metaData.extensions = [];
 					
 					tp.items.each(function(tab){
+						if (!tab.skip) {
 						
-						if (tab.type == 'ext') {
-							var tmpRec = {
-									name: tab.title
-								,	fields: []
-							}
-							tab.extension.store.each(function(rec) {
-								tmpRec.fields.push({
-									term: rec.data.term
+							if (tab.type == 'ext') {
+								var tmpRec = {
+										name: tab.title
+									,	filename: tab.extension.filename.getValue()
+									,	fileSettings: tab.fileSettings.prop.getSource()
+									,	fields: []
+								}
+								tab.extension.store.each(function(rec) {
+									tmpRec.fields.push({
+										term: rec.data.term
+									});
 								});
-							});
-							panel.metaData.extensions.push(tmpRec);
-							delete(tmpRec);
-							panel.generateXML();
-						}
+								panel.metaData.extensions.push(tmpRec);
+								delete(tmpRec);
+								panel.generateXML();
+							}
+	
+							if (tab.type == 'core') {
+								var tmpProp = tab.fileSettings.prop.getSource();
+//								console.log(tmpProp);
+								if (Ext.isEmpty(tmpProp)) {
+									tmpProp = {
+										foo: "bar",
+										"Field Delimiter": "\\t"
+									}
+								}
+/*								
+								var prop = {
+									fieldTerminatedBy: tmpProp.FieldDelimiter || null
+								}
+								console.log(prop);
+*/								
+//console.log(tab.fileSettings.prop.getSource() );
+								var tmpRec = {
+										name: tab.title
+									,	filename: tab.extension.filename.getValue()
+//									,	fileSettings: prop
+									,	fileSettings: tmpProp
+									,	fields: []
+								}
+								
+								tab.extension.store.each(function(rec) {
+									tmpRec.fields.push({
+										term: rec.data.term
+									});
+								});
+								panel.metaData.core.push(tmpRec);
+								delete(tmpRec);
+								panel.generateXML();
+							}
 
-						if (tab.type == 'core') {
-							var tmpRec = {
-									name: tab.title
-								,	fields: []
-							}
-							tab.extension.store.each(function(rec) {
-								tmpRec.fields.push({
-									term: rec.data.term
-								});
-							});
-							panel.metaData.core.push(tmpRec);
-							delete(tmpRec);
-							panel.generateXML();
 						}
 
 					});

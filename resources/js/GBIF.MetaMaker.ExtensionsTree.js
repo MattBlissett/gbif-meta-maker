@@ -68,17 +68,17 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 		}
 
 	,	toggleCore: function(id) {
-			var active = "";
+			var old = "";
 			this.suspendEvents();
 			if ( id == 'specimens' ) {
 				this.getNodeById('observations').getUI().toggleCheck();
-				active = "observations";
+				old = "observations";
 			} else {
 				this.getNodeById('specimens').getUI().toggleCheck();
-				active = "specimens";
+				old = "specimens";
 			}
 			this.resumeEvents();
-			return(active);
+			return(old);
 		}
 
 	,	extensionsResponse: function(response, node, callback){

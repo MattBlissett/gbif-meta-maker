@@ -11,21 +11,27 @@ GBIF.MetaMaker.Extension = function(config){
 		]
 	});
 
+	this.filename = new Ext.form.TextField({
+		width: 250
+	});
+
 	Ext.apply(this, config, {
 			store: store
 		,	columns: [
-          new Ext.grid.RowNumberer()
-      	,	{header: 'Term', width: 160, sortable: true, dataIndex: 'term'}
-				,	{header: 'Data Type', width: 160, sortable: false, dataIndex: 'dataType'}
-				,	{header: 'Required', width: 160, sortable: false, dataIndex: 'required'}
+//          new Ext.grid.RowNumberer()
+      		{header: 'Term', width: 160, sortable: true, dataIndex: 'term'}
+//				,	{header: 'Data Type', width: 160, sortable: false, dataIndex: 'dataType'}
+//				,	{header: 'Required', width: 160, sortable: false, dataIndex: 'required'}
 			]
 		,	stripeRows: true
-		,	title: 'Extension'
+//		,	title: 'Extension'
 		,	tbar: [{
 					text: 'Add Spacer'
 				,	handler: this.addSpacer
 				,	scope: this
-			}]
+			}, "Filename:"
+				, this.filename
+			]
     ,	ddGroup: 'testDDGroup'
     ,	enableDragDrop: true
     ,	autoScroll: true

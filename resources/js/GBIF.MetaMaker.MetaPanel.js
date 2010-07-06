@@ -15,18 +15,25 @@ GBIF.MetaMaker.MetaPanel = function(config){
 	Ext.apply(this, config, {
 			height: 200
 		,	type: 'meta'
+		,	id: 'meta'
 		,	title: 'meta.xml'
+		,	skip: true
 		,	iconCls: 'iconPageWhiteCode'
 		,	padding: 10
 		,	autoScroll: true
 		,	border: false
-		,	tbar: ["Filename:", this.filename ]
+		,	tbar: ["Filename:", this.filename, {
+					text: "Save File"
+				, handler: function() {
+//						console.log("Savefile");
+				 	}
+			}]
 		,	tpl: new Ext.XTemplate(
 					'<pre><div class="meta">&lt;?xml version="1.0"?&gt;<br/>'
 				,	'&lt;archive xmlns="http://rs.tdwg.org/dwc/text/"&gt;<br/>'
 
 				,	'<tpl for="core">'
-				,	'\t&lt;core encoding="{encoding}" linesTerminatedBy="{linesTerminatedBy}" fieldsTerminatedBy="{fieldsTerminatedBy}" fieldsEnclosedBy="{fieldsEnclosedBy}" ignoreHeaderLines="{ignoreHeaderLines}" rowType="{rowType}"&gt;<br/>'
+				,	'\t&lt;core encoding="{[values.fileSettings["File Encoding"]]}" linesTerminatedBy="{[values.fileSettings["Line ending"]]}" fieldsTerminatedBy="{[values.fileSettings["Filed Delimiter"]]}" fieldsEnclosedBy="{fieldsEnclosedBy}" ignoreHeaderLines="{[values.fileSettings["Ignore header row"]]}" rowType="???"&gt;<br/>'
 				,		'\t\t&lt;files&gt;<br/>'
 				,			'\t\t\t&lt;location>{filename}&lt;/location&gt;<br/>'
 				,		'\t\t&lt;/files&gt;<br/>'
@@ -45,7 +52,7 @@ GBIF.MetaMaker.MetaPanel = function(config){
 
 
 				,	'<tpl for="extensions">'
-				,	'\t&lt;extension encoding="{encoding}" linesTerminatedBy="{linesTerminatedBy}" fieldsTerminatedBy="{fieldsTerminatedBy}" fieldsEnclosedBy="{fieldsEnclosedBy}" ignoreHeaderLines="{ignoreHeaderLines}" rowType="{rowType}"&gt;<br/>'
+				,	'\t&lt;extension encoding="{[values.fileSettings["File Encoding"]]}" linesTerminatedBy="{[values.fileSettings["Line ending"]]}" fieldsTerminatedBy="{[values.fileSettings["Filed Delimiter"]]}" fieldsEnclosedBy="{fieldsEnclosedBy}" ignoreHeaderLines="{[values.fileSettings["Ignore header row"]]}" rowType="???"&gt;<br/>'
 				,		'\t\t&lt;files&gt;<br/>'
 				,			'\t\t\t&lt;location>{filename}&lt;/location&gt;<br/>'
 				,		'\t\t&lt;/files&gt;<br/>'
