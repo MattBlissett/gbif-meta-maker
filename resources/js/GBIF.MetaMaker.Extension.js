@@ -8,6 +8,7 @@ GBIF.MetaMaker.Extension = function(config){
 			 	{name: 'term'}
 			,	{name: 'dataType'}
 			,	{name: 'required'}
+			,	{name: 'static'}
 		]
 	});
 
@@ -22,6 +23,7 @@ GBIF.MetaMaker.Extension = function(config){
       		{header: 'Term', width: 160, sortable: true, dataIndex: 'term'}
 //				,	{header: 'Data Type', width: 160, sortable: false, dataIndex: 'dataType'}
 //				,	{header: 'Required', width: 160, sortable: false, dataIndex: 'required'}
+				,	{header: 'Static/Variable Mapping', width: 200,	dataIndex: 'static', editor: new Ext.form.TextField() }
 			]
 		,	stripeRows: true
 //		,	title: 'Extension'
@@ -29,12 +31,13 @@ GBIF.MetaMaker.Extension = function(config){
 					text: 'Add Spacer'
 				,	handler: this.addSpacer
 				,	scope: this
-			}, "Filename:"
+			}, "->", "Filename:"
 				, this.filename
 			]
-    ,	ddGroup: 'testDDGroup'
-    ,	enableDragDrop: true
+//    ,	ddGroup: 'testDDGroup'
+//    ,	enableDragDrop: true
     ,	autoScroll: true
+		,	clicksToEdit: 1
     ,	listeners: {
         render: function(g) {
 					var ddrow = new Ext.ux.dd.GridReorderDropTarget(g, {
@@ -64,6 +67,12 @@ GBIF.MetaMaker.Extension = function(config){
             // if you previously registered with the scroll manager, unregister it (if you don't it will lead to problems in IE)
             Ext.dd.ScrollManager.unregister(g.getView().getEditorParent());
         }
+			,	beforeedit: function(e) {
+					if (e.record.data.term == "Spacer") {
+						return( false );
+					}
+//						console.log( this, e );					
+				}
     }
 	});
 
@@ -71,7 +80,7 @@ GBIF.MetaMaker.Extension = function(config){
 
 }	
 
-Ext.extend(GBIF.MetaMaker.Extension, Ext.grid.GridPanel, {
+Ext.extend(GBIF.MetaMaker.Extension, Ext.grid.EditorGridPanel, {
 
 	addSpacer: function() {
 		this.store.loadData([["Spacer", "", false]], true );

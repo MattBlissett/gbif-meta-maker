@@ -21,14 +21,14 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 								,	leaf: false
 								,	checked: true
 								,	type: 'core'
-								,	url: 'http://gbif-meta-maker.googlecode.com/svn/trunk/sample.xml'
+								,	url: 'http://rs.gbif.org/core/dwc_taxon.xml'
 							}, {
-									text: 'Observations'
-								,	id: 'observations'
+									text: 'Occurrences'
+								,	id: 'occurrences'
 								,	leaf: false
 								,	checked: false
 								,	type: 'core'
-								,	url: 'http://gbif-meta-maker.googlecode.com/svn/trunk/sample.xml'
+								,	url: 'http://rs.gbif.org/core/dwc_occurrence.xml'
 							}]
 					}, {
 							text: 'Extensions'
@@ -71,8 +71,8 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 			var old = "";
 			this.suspendEvents();
 			if ( id == 'specimens' ) {
-				this.getNodeById('observations').getUI().toggleCheck();
-				old = "observations";
+				this.getNodeById('occurrences').getUI().toggleCheck();
+				old = "occurrences";
 			} else {
 				this.getNodeById('specimens').getUI().toggleCheck();
 				old = "specimens";

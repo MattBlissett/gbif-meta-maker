@@ -22,9 +22,14 @@ GBIF.MetaMaker.MetaPanel = function(config){
 		,	padding: 10
 		,	autoScroll: true
 		,	border: false
-		,	tbar: ["Filename:", this.filename, {
+		,	tbar: [
+//						 "Filename:", this.filename, 
+						 {
 					text: "Save File"
+				,	scope: this
 				, handler: function() {
+					console.log( this.body, this.body.dom.textContent );
+						window.location = "resources/api/savefile.php?data=" + this.body.dom.textContent;
 //						console.log("Savefile");
 				 	}
 			}]
