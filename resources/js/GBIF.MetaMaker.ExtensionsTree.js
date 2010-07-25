@@ -16,8 +16,8 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 						,	expanded: true
 						,	iconCls: 'iconBook'
 						,	children: [{
-									text: 'Specimens'
-								,	id: 'specimens'
+									text: 'Taxon'
+								,	id: 'taxon'
 								,	leaf: false
 								,	checked: true
 								,	type: 'core'
@@ -41,7 +41,8 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 		,	rootVisible: false
 		,	autoScroll: true
 		,	loader: new Ext.tree.TreeLoader({
-					dataUrl: 'resources/api/proxy.php?url=http://gbrds.gbif.org/registry/ipt/extensions.json&type=json'
+//					dataUrl: 'resources/api/proxy.php?url=http://gbrds.gbif.org/registry/ipt/extensions.json&type=json'
+					dataUrl: 'extensions.json'
 				,	listeners: {
 							beforeload: this.testNodeUri
 						,	scope: this
@@ -74,8 +75,8 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 				this.getNodeById('occurrences').getUI().toggleCheck();
 				old = "occurrences";
 			} else {
-				this.getNodeById('specimens').getUI().toggleCheck();
-				old = "specimens";
+				this.getNodeById('taxon').getUI().toggleCheck();
+				old = "taxon";
 			}
 			this.resumeEvents();
 			return(old);
@@ -117,11 +118,13 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 				var n = this.createNode({});
 				n.text = record.getAttribute("name");
 				n.leaf = true;
+				n.url = record.getAttribute("url");
 				n.attributes.type = 'attribute';
 				n.attributes.term = record.getAttribute("name");
 				n.attributes.namespace = record.getAttribute("namespace");
 				n.attributes.qualName = record.getAttribute("qualName");
 				n.attributes.thesaurus = record.getAttribute("thesaurus");
+				n.attributes.required = record.getAttribute("required");
 				n.attributes.checked = false;
 				n.iconCls = 'iconText';
 				if (n) {

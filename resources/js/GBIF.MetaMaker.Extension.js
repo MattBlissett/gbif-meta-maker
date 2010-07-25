@@ -9,6 +9,10 @@ GBIF.MetaMaker.Extension = function(config){
 			,	{name: 'dataType'}
 			,	{name: 'required'}
 			,	{name: 'static'}
+			,	{name: 'description'}
+			,	{name: 'qualName'}
+			,	{name: 'namespace'}
+			,	{name: 'relation'}
 		]
 	});
 
@@ -36,6 +40,7 @@ GBIF.MetaMaker.Extension = function(config){
 			]
 //    ,	ddGroup: 'testDDGroup'
 //    ,	enableDragDrop: true
+		,	sm: new Ext.grid.RowSelectionModel({singleSelect:true})
     ,	autoScroll: true
 		,	clicksToEdit: 1
     ,	listeners: {
@@ -63,7 +68,7 @@ GBIF.MetaMaker.Extension = function(config){
 					// if you need scrolling, register the grid view's scroller with the scroll manager
 					Ext.dd.ScrollManager.register(g.getView().getEditorParent());
         }
-        ,beforedestroy: function(g) {
+			,	beforedestroy: function(g) {
             // if you previously registered with the scroll manager, unregister it (if you don't it will lead to problems in IE)
             Ext.dd.ScrollManager.unregister(g.getView().getEditorParent());
         }
@@ -73,6 +78,7 @@ GBIF.MetaMaker.Extension = function(config){
 					}
 //						console.log( this, e );					
 				}
+			,	rowcontextmenu: this.rightClickMenu
     }
 	});
 
@@ -82,8 +88,25 @@ GBIF.MetaMaker.Extension = function(config){
 
 Ext.extend(GBIF.MetaMaker.Extension, Ext.grid.EditorGridPanel, {
 
-	addSpacer: function() {
-		this.store.loadData([["Spacer", "", false]], true );
-	}
+		addSpacer: function() {
+			this.store.loadData([["Spacer", "", false]], true );
+		}
+
+	,	rightClickMenu: function(grid, row, e){
+			grid.getSelectionModel().selectRow(row);
+			var record = grid.getSelectionModel().getSelected().data;
+			var items = [{
+					text: 'Remove Attribute'
+				,	scope: this
+				,	handler: function(a, b, c) {
+//						console.log(a, b, c);
+					}
+			}];
+			var menu = new Ext.menu.Menu({
+				items: items
+			});
+			var xy = e.getXY();
+			menu.showAt(xy);
+		}
 
 });

@@ -1,0 +1,19 @@
+{
+	"extensions":[{		
+			"id":1
+		,	"title":"Distribution"
+		,	"url":"http://rs.gbif.org/extension/gbif/1.0/distribution.xml"
+	}, {
+			"id":2
+		,	"title":"Identifier"
+		,	"url":"http://rs.gbif.org/extension/gbif/1.0/identifier.xml"
+	}, {
+			"id":3
+		,	"title":"References"
+		,	"url":"http://rs.gbif.org/extension/gbif/1.0/references.xml"
+	}, {
+			"id":4
+		,	"title":"Vernacular"
+		,	"url":"http://rs.gbif.org/extension/gbif/1.0/vernacular.xml"
+	}]
+}

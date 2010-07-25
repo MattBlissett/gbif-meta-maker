@@ -26,7 +26,7 @@ Ext.onReady(function() {
 					 '<img src="resources/images/gbif.jpg" alt="GBif" width="104" height="90" border="0" /></a>'+
 				 '<div class="header-text">'+
 					 '<h1>MetaMaker v1.0</h1>'+
-					 '<p><i>GBIF metafile creation and validation tool</i></p>'+
+					 '<p><i>GBIF metafile creation tool</i></p>'+
 				 '</div></div>'
 	}
 			

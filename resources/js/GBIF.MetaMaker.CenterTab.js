@@ -4,18 +4,27 @@ Ext.namespace('GBIF.MetaMaker');
 GBIF.MetaMaker.CenterTab = function(config){
 
 	this.metaPanel = new GBIF.MetaMaker.MetaPanel();
+	this.aboutPanel = new Ext.Panel({
+			title: 'About'
+		,	autoLoad: 'resources/docs/about.html'
+		,	padding: 5
+		,	bodyStyle: 'font-size: 12px'
+	});
+	
 	this.coreSpecimensPanel = new GBIF.MetaMaker.ExtensionPanel({
-			id: 'core-specimens'
-		,	title: 'Specimens'
+			id: 'core-taxon'
+		,	title: 'Taxon'
 		,	type: 'core'
 		,	skip: false
+		,	url: 'http://rs.gbif.org/core/dwc_taxon.xml'
 	});
 
 	this.coreObservationsPanel = new GBIF.MetaMaker.ExtensionPanel({
-			id: 'core-observations'
-		,	title: 'Observations'
+			id: 'core-occurrences'
+		,	title: 'Occurrences'
 		,	type: 'core'
 		,	skip: true
+		,	url: 'http://rs.gbif.org/core/dwc_occurrence.xml'
 	});
 	
 	Ext.apply(this, config, {
@@ -23,14 +32,15 @@ GBIF.MetaMaker.CenterTab = function(config){
 		,	height: 400
 		,	activeTab: 0
 		,	items: [
-					this.metaPanel
+					this.aboutPanel
+				,	this.metaPanel
 				,	this.coreSpecimensPanel
 				,	this.coreObservationsPanel
 			]
 		,	listeners: {
 					tabchange: this.checkTab
 				,	render: function() {
-						this.hideTabStripItem("core-observations");
+						this.hideTabStripItem("core-occurrences");
 					}
 			}
 	});
@@ -50,17 +60,21 @@ Ext.extend(GBIF.MetaMaker.CenterTab,Ext.TabPanel,  {
 					
 					tp.items.each(function(tab){
 						if (!tab.skip) {
-						
 							if (tab.type == 'ext') {
 								var tmpRec = {
 										name: tab.title
+									,	rowType: tab.url
 									,	filename: tab.extension.filename.getValue()
 									,	fileSettings: tab.fileSettings.prop.getSource()
 									,	fields: []
 								}
 								tab.extension.store.each(function(rec) {
 									tmpRec.fields.push({
-										term: rec.data.term
+											term: rec.data.term
+										,	dataType: rec.data.dataType
+										,	required: rec.data.required
+										,	static: rec.data.static
+										,	qualName: rec.data.qualName
 									});
 								});
 								panel.metaData.extensions.push(tmpRec);
@@ -86,6 +100,7 @@ Ext.extend(GBIF.MetaMaker.CenterTab,Ext.TabPanel,  {
 //console.log(tab.fileSettings.prop.getSource() );
 								var tmpRec = {
 										name: tab.title
+									,	rowType: tab.url
 									,	filename: tab.extension.filename.getValue()
 //									,	fileSettings: prop
 									,	fileSettings: tmpProp

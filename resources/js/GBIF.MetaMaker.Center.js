@@ -72,6 +72,7 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 								,	title: node.text
 								,	type: 'ext'
 								,	skip: false
+								,	url: node.attributes.url
 							}) );
 							this.metaMakerCenterTab.setActiveTab( "extension-" + node.id );
 							node.expand();
@@ -107,6 +108,7 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 								id: "ext-" + node.parentNode.id
 							,	title: node.parentNode.text
 							,	type: 'ext'
+							,	url: node.parentNode.attributes.url							
 						});
 
 						this.metaMakerCenterTab.add( tmpTab );
@@ -114,7 +116,16 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 					}
 //					console.log(node.attributes);
 					if (state) {
-						tmpTab.extension.store.loadData([[node.attributes.term, "string", true]], true );
+						tmpTab.extension.store.loadData([[
+								node.attributes.term
+							, node.attributes.dataType
+							, node.attributes.required							
+							, node.attributes.static							
+							, node.attributes.description							
+							, node.attributes.qualName					
+							, node.attributes.namespace
+							, node.attributes.relation
+						]], true );
 					} else {
 						var index = tmpTab.extension.store.find("term", node.attributes.term);
 						if (index >= 0 ) {

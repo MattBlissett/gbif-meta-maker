@@ -22,15 +22,11 @@ GBIF.MetaMaker.MetaPanel = function(config){
 		,	padding: 10
 		,	autoScroll: true
 		,	border: false
-		,	tbar: [
-//						 "Filename:", this.filename, 
-						 {
+		,	tbar: [{
 					text: "Save File"
 				,	scope: this
 				, handler: function() {
-					console.log( this.body, this.body.dom.textContent );
 						window.location = "resources/api/savefile.php?data=" + this.body.dom.textContent;
-//						console.log("Savefile");
 				 	}
 			}]
 		,	tpl: new Ext.XTemplate(
@@ -38,7 +34,7 @@ GBIF.MetaMaker.MetaPanel = function(config){
 				,	'&lt;archive xmlns="http://rs.tdwg.org/dwc/text/"&gt;<br/>'
 
 				,	'<tpl for="core">'
-				,	'\t&lt;core encoding="{[values.fileSettings["File Encoding"]]}" linesTerminatedBy="{[values.fileSettings["Line ending"]]}" fieldsTerminatedBy="{[values.fileSettings["Filed Delimiter"]]}" fieldsEnclosedBy="{fieldsEnclosedBy}" ignoreHeaderLines="{[values.fileSettings["Ignore header row"]]}" rowType="???"&gt;<br/>'
+				,	'\t&lt;core encoding="{[values.fileSettings["File Encoding"]]}" linesTerminatedBy="{[values.fileSettings["Line ending"]]}" fieldsTerminatedBy="{[values.fileSettings["Field Delimiter"]]}" fieldsEnclosedBy="{[values.fileSettings["Fields enclosed by"]]}" ignoreHeaderLines="{[values.fileSettings["Ignore header row"]]}" rowType="{rowType}"&gt;<br/>'
 				,		'\t\t&lt;files&gt;<br/>'
 				,			'\t\t\t&lt;location>{filename}&lt;/location&gt;<br/>'
 				,		'\t\t&lt;/files&gt;<br/>'
@@ -57,7 +53,7 @@ GBIF.MetaMaker.MetaPanel = function(config){
 
 
 				,	'<tpl for="extensions">'
-				,	'\t&lt;extension encoding="{[values.fileSettings["File Encoding"]]}" linesTerminatedBy="{[values.fileSettings["Line ending"]]}" fieldsTerminatedBy="{[values.fileSettings["Filed Delimiter"]]}" fieldsEnclosedBy="{fieldsEnclosedBy}" ignoreHeaderLines="{[values.fileSettings["Ignore header row"]]}" rowType="???"&gt;<br/>'
+				,	'\t&lt;extension encoding="{[values.fileSettings["File Encoding"]]}" linesTerminatedBy="{[values.fileSettings["Line ending"]]}" fieldsTerminatedBy="{[values.fileSettings["Field Delimiter"]]}" fieldsEnclosedBy="{[values.fileSettings["Fields enclosed by"]]}" ignoreHeaderLines="{[values.fileSettings["Ignore header row"]]}" rowType="{rowType}"&gt;<br/>'
 				,		'\t\t&lt;files&gt;<br/>'
 				,			'\t\t\t&lt;location>{filename}&lt;/location&gt;<br/>'
 				,		'\t\t&lt;/files&gt;<br/>'
@@ -66,7 +62,11 @@ GBIF.MetaMaker.MetaPanel = function(config){
 
 				,		'<tpl for="fields">'
 				,			'<tpl if="term != \'Spacer\'">'
-				,					'\t\t&lt;field index="{#}" term="{term}"/&gt;<br/>'
+				,					'\t\t&lt;field index="{#}" '
+				,						'<tpl if="static != \'\'">'
+				,							' default="{static}" '
+				,						'</tpl>'
+				,					'term="{qualName}"/&gt;<br/>'
 				,			'</tpl>'
 				,		'</tpl>'
 
@@ -95,6 +95,7 @@ GBIF.MetaMaker.MetaPanel = function(config){
 Ext.extend(GBIF.MetaMaker.MetaPanel, Ext.Panel, {
 
 	generateXML: function() {
+//console.log(this.metaData);		
 		this.tpl.overwrite(this.body, this.metaData);
 	}
 
