@@ -15,34 +15,45 @@ GBIF.MetaMaker.FileSettings = function(config){
 		,	items: [{
 					xtype: 'fieldset'						
 				,	defaultType: 'radio'
+				,	ref: 'fileSettingOptions'
 				,	defaults: {
 							handler: this.changeProp
 						,	scope: this
 					}
 				,	items: [{
-							checked: true
-						,	fieldLabel: 'File Settings'
+//							checked: true
+							fieldLabel: 'File Settings'
+						,	itemId: 'radio-csv'
 						,	boxLabel: 'CSV File'
 						,	name: 'format'
 						,	inputValue: 'csv'
 					}, {
 							fieldLabel: ''
-						 , labelSeparator: ''
-						 , boxLabel: 'Tab Separated File'
-						 , name: 'format'
-						 , inputValue: 'tab'
+						,	itemId: 'radio-tab'
+						, labelSeparator: ''
+						, boxLabel: 'Tab Separated File'
+						, name: 'format'
+						, inputValue: 'tab'
 					}, {
 							fieldLabel: ''
-						 , labelSeparator: ''
-						 , boxLabel: 'Custom Format'
-						 , name: 'format'
-						 , inputValue: 'custom'
+						,	itemId: 'radio-custom'
+						, labelSeparator: ''
+						, boxLabel: 'Custom Format'
+						, name: 'format'
+						, inputValue: 'custom'
 					}]
 				,	listeners: {
-						change: this.changeProp
+							change: this.changeProp
+						,	scope: this
 					}
 			}, this.prop
 			]
+		,	listeners: {
+				render: function() {
+					this.fileSettingOptions.getComponent('radio-csv').setValue(true);
+					this.fileSettingOptions.fireEvent('change', this.fileSettingOptions.getComponent('radio-csv'), true );
+				}
+			}
 	});
 
 	GBIF.MetaMaker.FileSettings.superclass.constructor.call(this, config);
@@ -58,7 +69,10 @@ Ext.extend(GBIF.MetaMaker.FileSettings, Ext.form.FormPanel, {
 
 			switch( obj.inputValue ) {
 				case 'csv':
-					this.prop.setCSV();
+					var task = new Ext.util.DelayedTask(function(){
+						this.prop.setCSV();
+					}, this);
+					task.delay(300); 
 					break;
 
 				case 'tab':
