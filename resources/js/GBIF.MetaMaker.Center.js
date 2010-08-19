@@ -41,15 +41,18 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 		}
 
 	,	activateTab: function( node ) {
-			if( this.metaMakerCenterTab.findById("ext-" + node.id) ) {			
-				this.metaMakerCenterTab.setActiveTab( "ext-" + node.id );
+			if( this.metaMakerCenterTab.findById("extension-" + node.id) ) {			
+				this.metaMakerCenterTab.setActiveTab( "extension-" + node.id );
 			}
 		}
 		
 	,	checkchange: function( node, state ) {
+			console.log(node, state);
 			switch( node.attributes.type ) {
 				case 'core':
-					var previousCoreItem = this.extensionsTree.toggleCore( node.id );
+					if (state == false) return;
+					
+					var previousCoreItem = this.extensionsTree.toggleCore( node.id, state );
 					this.metaMakerCenterTab.hideTabStripItem("core-" + previousCoreItem);
 					this.metaMakerCenterTab.getComponent("core-" + previousCoreItem).skip = true;
 					
@@ -90,6 +93,15 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 					break;
 
 				case 'attribute':
+					// Check to see if it is required if so do not allow item to be unchecked and removed.
+					
+					if (node.attributes.required == "true" && state == false) {
+						node.suspendEvents();
+						node.getUI().toggleCheck(true);
+						node.resumeEvents();
+						return(false);
+					}
+					
 					var prefix = node.parentNode.attributes.type;			
 
 					// Check parent if not already checked

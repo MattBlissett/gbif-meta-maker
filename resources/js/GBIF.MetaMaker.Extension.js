@@ -24,9 +24,9 @@ GBIF.MetaMaker.Extension = function(config){
 			store: store
 		,	columns: [
 //          new Ext.grid.RowNumberer()
-      		{header: 'Term', width: 160, sortable: true, dataIndex: 'term'}
+      		{header: 'Term', width: 160, sortable: false, dataIndex: 'term'}
 //				,	{header: 'Data Type', width: 160, sortable: false, dataIndex: 'dataType'}
-//				,	{header: 'Required', width: 160, sortable: false, dataIndex: 'required'}
+				,	{header: 'Required', width: 160, sortable: false, dataIndex: 'required'}
 				,	{header: 'Static/Variable Mapping', width: 200,	dataIndex: 'static', editor: new Ext.form.TextField() }
 			]
 		,	stripeRows: true
@@ -39,10 +39,13 @@ GBIF.MetaMaker.Extension = function(config){
 				, this.filename
 			]
 //    ,	ddGroup: 'testDDGroup'
-//    ,	enableDragDrop: true
+    ,	enableDragDrop: true
 		,	sm: new Ext.grid.RowSelectionModel({singleSelect:true})
     ,	autoScroll: true
 		,	clicksToEdit: 1
+		,	enableColumnHide: false
+		,	enableColumnMove: false
+		,	enableHdMenu: false
     ,	listeners: {
         render: function(g) {
 					var ddrow = new Ext.ux.dd.GridReorderDropTarget(g, {
@@ -95,11 +98,15 @@ Ext.extend(GBIF.MetaMaker.Extension, Ext.grid.EditorGridPanel, {
 	,	rightClickMenu: function(grid, row, e){
 			grid.getSelectionModel().selectRow(row);
 			var record = grid.getSelectionModel().getSelected().data;
+			if (record.term != "Spacer") {
+				return(false);
+			}
+
 			var items = [{
-					text: 'Remove Attribute'
+					text: 'Remove Spacer'
 				,	scope: this
 				,	handler: function(a, b, c) {
-//						console.log(a, b, c);
+						grid.store.remove( grid.getSelectionModel().getSelected() );
 					}
 			}];
 			var menu = new Ext.menu.Menu({

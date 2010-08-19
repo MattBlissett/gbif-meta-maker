@@ -38,7 +38,7 @@ Ext.extend(GBIF.MetaMaker.Properties, Ext.grid.PropertyGrid, {
 					'File Encoding': 'UTF-8'
 				,	'Field Delimiter': ','
 				,	'Fields enclosed by': '\"\"'
-				,	'Line ending': '\\n'
+				,	'Line ending': '\\r\\n'
 				,	'Ignore header row': true
 			});
 			

@@ -4,6 +4,8 @@ Ext.namespace('GBIF.MetaMaker');
 
 GBIF.MetaMaker.ExtensionsTree = function(config){
 
+	this.oldCore = "";
+	
 	Ext.apply(this, config, {
 			root: new Ext.tree.AsyncTreeNode({
 					text: 'Root Node'
@@ -40,6 +42,9 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 		,	useArrows: true
 		,	rootVisible: false
 		,	autoScroll: true
+		,	plugins: new Ext.ux.DataTip({
+					tpl: 'Description: {description}<br>Examples: {examples}'
+			})		
 		,	loader: new Ext.tree.TreeLoader({
 //					dataUrl: 'resources/api/proxy.php?url=http://gbrds.gbif.org/registry/ipt/extensions.json&type=json'
 					dataUrl: 'extensions.json'
@@ -68,18 +73,19 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 			}
 		}
 
-	,	toggleCore: function(id) {
-			var old = "";
+	,	toggleCore: function(id, state) {
+			if (state == false) return;
+//console.log(id, state, this.oldCore);		
 			this.suspendEvents();
-			if ( id == 'specimens' ) {
+			if ( id == 'taxon' ) {
 				this.getNodeById('occurrences').getUI().toggleCheck();
-				old = "occurrences";
+				this.oldCore = "occurrences";
 			} else {
 				this.getNodeById('taxon').getUI().toggleCheck();
-				old = "taxon";
+				this.oldCore = "taxon";
 			}
 			this.resumeEvents();
-			return(old);
+			return(this.oldCore);
 		}
 
 	,	extensionsResponse: function(response, node, callback){
@@ -125,8 +131,14 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 				n.attributes.qualName = record.getAttribute("qualName");
 				n.attributes.thesaurus = record.getAttribute("thesaurus");
 				n.attributes.required = record.getAttribute("required");
-				n.attributes.checked = false;
+				n.attributes.description = record.getAttribute("desciption");
+				n.attributes.examples = record.getAttribute("examples");
+				n.attributes.checked = (n.attributes.required == "true") ? true : false;
 				n.iconCls = 'iconText';
+				if (n.attributes.checked) {
+					n.getUI().addClass("required");
+					n.iconCls = "iconRequired";
+				}
 				if (n) {
 					node.appendChild(n);
 				}
@@ -134,7 +146,9 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 				if (typeof callback == "function") {
 					callback(this, node);
 				}
-
+				if (n.attributes.checked) {
+					n.fireEvent('checkchange', n, true);
+				}
 			}, this);
 		}
 });
