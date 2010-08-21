@@ -109,7 +109,11 @@ Ext.extend(GBIF.MetaMaker.CenterTab,Ext.TabPanel,  {
 								
 								tab.extension.store.each(function(rec) {
 									tmpRec.fields.push({
-										term: rec.data.term
+											term: rec.data.term
+										,	dataType: rec.data.dataType
+										,	required: rec.data.required
+										,	static: rec.data.static
+										,	qualName: rec.data.qualName
 									});
 								});
 								panel.metaData.core.push(tmpRec);

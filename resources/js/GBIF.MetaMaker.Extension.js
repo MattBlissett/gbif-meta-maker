@@ -17,14 +17,16 @@ GBIF.MetaMaker.Extension = function(config){
 	});
 
 	this.filename = new Ext.form.TextField({
-		width: 250
+			width: 250
+		,	emptyText: "{your filename here} Ex: myfile.csv"
 	});
 
 	Ext.apply(this, config, {
 			store: store
 		,	columns: [
 //          new Ext.grid.RowNumberer()
-      		{header: 'Term', width: 160, sortable: false, dataIndex: 'term'}
+      		{header: '&nbsp;', width: 25, sortable: false, dataIndex: '', renderer: this.renderReorder}
+      	,	{header: 'Term', width: 160, sortable: false, dataIndex: 'term'}
 //				,	{header: 'Data Type', width: 160, sortable: false, dataIndex: 'dataType'}
 				,	{header: 'Required', width: 160, sortable: false, dataIndex: 'required'}
 				,	{header: 'Static/Variable Mapping', width: 200,	dataIndex: 'static', editor: new Ext.form.TextField() }
@@ -95,6 +97,11 @@ Ext.extend(GBIF.MetaMaker.Extension, Ext.grid.EditorGridPanel, {
 			this.store.loadData([["Spacer", "", false]], true );
 		}
 
+	,	renderReorder: function(value) {
+			var html = '<img qtip="Click and drag row to reorder." src="resources/images/icons/vert.png">';
+			return(html);
+		}
+		
 	,	rightClickMenu: function(grid, row, e){
 			grid.getSelectionModel().selectRow(row);
 			var record = grid.getSelectionModel().getSelected().data;

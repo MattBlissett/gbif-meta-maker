@@ -47,7 +47,7 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 		}
 		
 	,	checkchange: function( node, state ) {
-			console.log(node, state);
+//			console.log(node, state);
 			switch( node.attributes.type ) {
 				case 'core':
 					if (state == false) return;

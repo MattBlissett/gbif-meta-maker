@@ -131,7 +131,7 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 				n.attributes.qualName = record.getAttribute("qualName");
 				n.attributes.thesaurus = record.getAttribute("thesaurus");
 				n.attributes.required = record.getAttribute("required");
-				n.attributes.description = record.getAttribute("desciption");
+				n.attributes.description = record.getAttribute("description");
 				n.attributes.examples = record.getAttribute("examples");
 				n.attributes.checked = (n.attributes.required == "true") ? true : false;
 				n.iconCls = 'iconText';
