@@ -46,8 +46,8 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 					tpl: 'Description: {description}<br><br>Examples: {examples}'
 			})		
 		,	loader: new Ext.tree.TreeLoader({
-//					dataUrl: 'resources/api/proxy.php?url=http://gbrds.gbif.org/registry/ipt/extensions.json&type=json'
-					dataUrl: 'extensions.json'
+					dataUrl: 'resources/api/proxy.php?url=http://gbrds.gbif.org/registry/extensions.json&type=json'
+//					dataUrl: 'extensions.json'
 				,	listeners: {
 							beforeload: this.testNodeUri
 						,	scope: this

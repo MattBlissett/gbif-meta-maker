@@ -80,7 +80,7 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 								,	title: node.text
 								,	type: 'ext'
 								,	skip: false
-								,	url: node.attributes.url
+								,	identifier: node.attributes.identifier
 							}) );
 							this.metaMakerCenterTab.setActiveTab( "extension-" + node.id );
 							node.expand();
@@ -125,7 +125,7 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 								id: "ext-" + node.parentNode.id
 							,	title: node.parentNode.text
 							,	type: 'ext'
-							,	url: node.parentNode.attributes.url							
+							,	identifier: node.parentNode.attributes.identifier
 						});
 
 						this.metaMakerCenterTab.add( tmpTab );

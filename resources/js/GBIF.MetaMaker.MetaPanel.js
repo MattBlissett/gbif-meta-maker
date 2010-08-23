@@ -9,7 +9,12 @@ GBIF.MetaMaker.MetaPanel = function(config){
 	};
 
 	this.filename = new Ext.form.TextField({
-		width: 100
+			width: 250
+		,	emptyText: "dataset metadata document, e.g.  eml.xml"
+		,	listeners: {
+					valid: this.generateXML
+				,	scope: this
+			}
 	});
 
 	Ext.apply(this, config, {
@@ -28,22 +33,34 @@ GBIF.MetaMaker.MetaPanel = function(config){
 				, handler: function() {
 						window.location = "resources/api/savefile.php?data=" + encodeURI(this.body.dom.textContent);
 				 	}
-			}]
+			}, "->", "Metadata file describing dataset:"
+				, this.filename
+			]
 		,	tpl: new Ext.XTemplate(
 					'<pre><div class="meta">&lt;?xml version="1.0"?&gt;\r\n'
-				,	'&lt;archive xmlns="http://rs.tdwg.org/dwc/text/"&gt;\r\n'
+				,	'&lt;archive xmlns="http://rs.tdwg.org/dwc/text/"'
+				,		'<tpl if="metadata != \'\'">'
+				,			' metadata="{metadata}"'
+				,		'</tpl>'
+				,	'&gt;\r\n'
 
 				,	'<tpl for="core">'
 				,	'\t&lt;core encoding="{[this.addSlashes(values.fileSettings["File Encoding"])]}" linesTerminatedBy="{[this.addSlashes(values.fileSettings["Line ending"])]}" fieldsTerminatedBy="{[this.addSlashes(values.fileSettings["Field Delimiter"])]}" fieldsEnclosedBy="{[this.addSlashes(values.fileSettings["Fields enclosed by"])]}" ignoreHeaderLines="{[this.addSlashes(values.fileSettings["Ignore header row"])]}" rowType="{rowType}"&gt;\r\n'
 				,		'\t\t&lt;files&gt;\r\n'
 				,			'\t\t\t&lt;location>{filename}&lt;/location&gt;\r\n'
 				,		'\t\t&lt;/files&gt;\r\n'
-				,		'\t\t&lt;coreid index="0"/&gt;\r\n'
+				,		'\t\t&lt;id index="0"/&gt;\r\n'
 				,		'<tpl for="fields">'
 				,			'<tpl if="xindex &gt; 0">'
 				,				'<tpl if="term != \'Spacer\'">'
-				,						'\t\t&lt;field index="{#}" '
-				,						'term="{qualName}"/&gt;\r\n'
+				,					'\t\t&lt;field '
+				,						'<tpl if="static == \'\'">'
+				,							' index="{#}" '
+				,						'</tpl>'
+				,						'<tpl if="static != \'\'">'
+				,							' default="{static}" '
+				,						'</tpl>'
+				,					'term="{qualName}"/&gt;\r\n'
 				,				'</tpl>'
 				,			'</tpl>'
 				,		'</tpl>'
@@ -60,7 +77,10 @@ GBIF.MetaMaker.MetaPanel = function(config){
 
 				,		'<tpl for="fields">'
 				,			'<tpl if="term != \'Spacer\'">'
-				,					'\t\t&lt;field index="{#}" '
+				,					'\t\t&lt;field '
+				,						'<tpl if="static == \'\'">'
+				,							' index="{#}" '
+				,						'</tpl>'
 				,						'<tpl if="static != \'\'">'
 				,							' default="{static}" '
 				,						'</tpl>'
@@ -99,6 +119,7 @@ GBIF.MetaMaker.MetaPanel = function(config){
 Ext.extend(GBIF.MetaMaker.MetaPanel, Ext.Panel, {
 
 	generateXML: function() {
+		this.metaData.metadata = this.filename.getValue();
 		this.tpl.overwrite(this.body, this.metaData);
 	}
 

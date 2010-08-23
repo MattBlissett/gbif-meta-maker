@@ -16,7 +16,7 @@ GBIF.MetaMaker.CenterTab = function(config){
 		,	title: 'Taxon'
 		,	type: 'core'
 		,	skip: false
-		,	url: 'http://rs.gbif.org/core/dwc_taxon.xml'
+		,	identifier: 'http://rs.tdwg.org/dwc/terms/Taxon'
 	});
 
 	this.coreObservationsPanel = new GBIF.MetaMaker.ExtensionPanel({
@@ -24,7 +24,7 @@ GBIF.MetaMaker.CenterTab = function(config){
 		,	title: 'Occurrences'
 		,	type: 'core'
 		,	skip: true
-		,	url: 'http://rs.gbif.org/core/dwc_occurrence.xml'
+		,	identifier: 'http://rs.tdwg.org/dwc/terms/Occurrence'
 	});
 	
 	Ext.apply(this, config, {
@@ -63,7 +63,7 @@ Ext.extend(GBIF.MetaMaker.CenterTab,Ext.TabPanel,  {
 							if (tab.type == 'ext') {
 								var tmpRec = {
 										name: tab.title
-									,	rowType: tab.url
+									,	rowType: tab.identifier
 									,	filename: tab.extension.filename.getValue()
 									,	fileSettings: tab.fileSettings.prop.getSource()
 									,	fields: []
@@ -96,7 +96,7 @@ Ext.extend(GBIF.MetaMaker.CenterTab,Ext.TabPanel,  {
 
 								var tmpRec = {
 										name: tab.title
-									,	rowType: tab.url
+									,	rowType: tab.identifier
 									,	filename: tab.extension.filename.getValue()
 									,	fileSettings: tmpProp
 									,	fields: []
