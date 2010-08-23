@@ -211,3 +211,14 @@ a:active {
 	background-color:#070;
 	border-color:#070;
 }
+
+.x-tree-node-disabled{
+	background-color: #E4FCE0;
+	-moz-opacity: 100;
+  opacity: 100;
+  filter: alpha(opacity=100);
+}
+
+.x-tree-node .x-tree-node-disabled a span{
+	color:black !important;
+}

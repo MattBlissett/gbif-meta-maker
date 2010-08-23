@@ -26,46 +26,37 @@ GBIF.MetaMaker.MetaPanel = function(config){
 					text: "Save File"
 				,	scope: this
 				, handler: function() {
-						window.location = "resources/api/savefile.php?data=" + this.body.dom.textContent;
+						window.location = "resources/api/savefile.php?data=" + encodeURI(this.body.dom.textContent);
 				 	}
 			}]
 		,	tpl: new Ext.XTemplate(
-					'<pre><div class="meta">&lt;?xml version="1.0"?&gt;<br/>'
-				,	'&lt;archive xmlns="http://rs.tdwg.org/dwc/text/"&gt;<br/>'
+					'<pre><div class="meta">&lt;?xml version="1.0"?&gt;\r\n'
+				,	'&lt;archive xmlns="http://rs.tdwg.org/dwc/text/"&gt;\r\n'
 
 				,	'<tpl for="core">'
-				,	'\t&lt;core encoding="{[values.fileSettings["File Encoding"]]}" linesTerminatedBy="{[values.fileSettings["Line ending"]]}" fieldsTerminatedBy="{[values.fileSettings["Field Delimiter"]]}" fieldsEnclosedBy="{[values.fileSettings["Fields enclosed by"]]}" ignoreHeaderLines="{[values.fileSettings["Ignore header row"]]}" rowType="{rowType}"&gt;<br/>'
-				,		'\t\t&lt;files&gt;<br/>'
-				,			'\t\t\t&lt;location>{filename}&lt;/location&gt;<br/>'
-				,		'\t\t&lt;/files&gt;<br/>'
+				,	'\t&lt;core encoding="{[this.addSlashes(values.fileSettings["File Encoding"])]}" linesTerminatedBy="{[this.addSlashes(values.fileSettings["Line ending"])]}" fieldsTerminatedBy="{[this.addSlashes(values.fileSettings["Field Delimiter"])]}" fieldsEnclosedBy="{[this.addSlashes(values.fileSettings["Fields enclosed by"])]}" ignoreHeaderLines="{[this.addSlashes(values.fileSettings["Ignore header row"])]}" rowType="{rowType}"&gt;\r\n'
+				,		'\t\t&lt;files&gt;\r\n'
+				,			'\t\t\t&lt;location>{filename}&lt;/location&gt;\r\n'
+				,		'\t\t&lt;/files&gt;\r\n'
+				,		'\t\t&lt;coreid index="0"/&gt;\r\n'
 				,		'<tpl for="fields">'
-				,			'<tpl if="xindex == 0">'
-				,				'\t\t&lt;coreid index="{#}"/&gt;<br/>'
-				,			'</tpl>'
-
 				,			'<tpl if="xindex &gt; 0">'
 				,				'<tpl if="term != \'Spacer\'">'
 				,						'\t\t&lt;field index="{#}" '
-//				,							'<tpl if="static != \'\'">'
-//				,								' default="{static}" '
-//				,							'</tpl>'
-				,						'term="{qualName}"/&gt;<br/>'
+				,						'term="{qualName}"/&gt;\r\n'
 				,				'</tpl>'
-//				,				'\t\t&lt;field index="{#}" term="{term}"/&gt;<br/>'
 				,			'</tpl>'
 				,		'</tpl>'
-				,	'\t&lt;/core&gt;<br/>'
+				,	'\t&lt;/core&gt;\r\n'
 				,	'</tpl>'
 
-
-
 				,	'<tpl for="extensions">'
-				,	'\t&lt;extension encoding="{[values.fileSettings["File Encoding"]]}" linesTerminatedBy="{[values.fileSettings["Line ending"]]}" fieldsTerminatedBy="{[values.fileSettings["Field Delimiter"]]}" fieldsEnclosedBy="{[values.fileSettings["Fields enclosed by"]]}" ignoreHeaderLines="{[values.fileSettings["Ignore header row"]]}" rowType="{rowType}"&gt;<br/>'
-				,		'\t\t&lt;files&gt;<br/>'
-				,			'\t\t\t&lt;location>{filename}&lt;/location&gt;<br/>'
-				,		'\t\t&lt;/files&gt;<br/>'
+				,	'\t&lt;extension encoding="{[this.addSlashes(values.fileSettings["File Encoding"])]}" linesTerminatedBy="{[this.addSlashes(values.fileSettings["Line ending"])]}" fieldsTerminatedBy="{[this.addSlashes(values.fileSettings["Field Delimiter"])]}" fieldsEnclosedBy="{[this.addSlashes(values.fileSettings["Fields enclosed by"])]}" ignoreHeaderLines="{[this.addSlashes(values.fileSettings["Ignore header row"])]}" rowType="{rowType}"&gt;\r\n'
+				,		'\t\t&lt;files&gt;\r\n'
+				,			'\t\t\t&lt;location>{filename}&lt;/location&gt;\r\n'
+				,		'\t\t&lt;/files&gt;\r\n'
 
-				,		'\t\t&lt;coreid index="0"/&gt;<br/>'
+				,		'\t\t&lt;coreid index="0"/&gt;\r\n'
 
 				,		'<tpl for="fields">'
 				,			'<tpl if="term != \'Spacer\'">'
@@ -73,27 +64,33 @@ GBIF.MetaMaker.MetaPanel = function(config){
 				,						'<tpl if="static != \'\'">'
 				,							' default="{static}" '
 				,						'</tpl>'
-				,					'term="{qualName}"/&gt;<br/>'
+				,					'term="{qualName}"/&gt;\r\n'
 				,			'</tpl>'
 				,		'</tpl>'
 
-				,	'\t&lt;/extension&gt;<br/>'
+				,	'\t&lt;/extension&gt;\r\n'
 				,	'</tpl>'
-
-
 
 				,	'&lt;/archive&gt;<br/>'
 				,	'</div>'
 				,	{
-						exists: function(o){
-//console.log(o);
+							exists: function(o){
 								return typeof o != 'undefined' && o != null && o!='';
-						}
+							}
+						,	addSlashes: function(o){		
+								if (typeof o == "boolean") {
+									return (o) ? 1 : 0;
+								}
+								
+								if (typeof o != 'undefined') {
+									return( o.replace(/\"/g, "\\\"") );
+								} else {
+									return("");
+								}
+							}
 					}
+					
 			)
-		,	listeners: {
-//				activate: this.generateXML
-			}
 	})
 
 	GBIF.MetaMaker.MetaPanel.superclass.constructor.call(this, config);
@@ -102,7 +99,6 @@ GBIF.MetaMaker.MetaPanel = function(config){
 Ext.extend(GBIF.MetaMaker.MetaPanel, Ext.Panel, {
 
 	generateXML: function() {
-//console.log(this.metaData);		
 		this.tpl.overwrite(this.body, this.metaData);
 	}
 

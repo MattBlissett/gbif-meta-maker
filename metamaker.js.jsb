@@ -14,6 +14,7 @@
   <file name="resources\js\GBIF.MetaMaker.MetaPanel.js" path="" />
   <file name="resources\js\GBIF.MetaMaker.Properties.js" path="" />
   <target name="MetaMaker" file="$output\GBIF.MetaMaker.MetaMaker.js" debug="False" shorthand="False" shorthand-list="YAHOO.util.Dom.setStyle&#xD;&#xA;YAHOO.util.Dom.getStyle&#xD;&#xA;YAHOO.util.Dom.getRegion&#xD;&#xA;YAHOO.util.Dom.getViewportHeight&#xD;&#xA;YAHOO.util.Dom.getViewportWidth&#xD;&#xA;YAHOO.util.Dom.get&#xD;&#xA;YAHOO.util.Dom.getXY&#xD;&#xA;YAHOO.util.Dom.setXY&#xD;&#xA;YAHOO.util.CustomEvent&#xD;&#xA;YAHOO.util.Event.addListener&#xD;&#xA;YAHOO.util.Event.getEvent&#xD;&#xA;YAHOO.util.Event.getTarget&#xD;&#xA;YAHOO.util.Event.preventDefault&#xD;&#xA;YAHOO.util.Event.stopEvent&#xD;&#xA;YAHOO.util.Event.stopPropagation&#xD;&#xA;YAHOO.util.Event.stopEvent&#xD;&#xA;YAHOO.util.Anim&#xD;&#xA;YAHOO.util.Motion&#xD;&#xA;YAHOO.util.Connect.asyncRequest&#xD;&#xA;YAHOO.util.Connect.setForm&#xD;&#xA;YAHOO.util.Dom&#xD;&#xA;YAHOO.util.Event">
+    <include name="resources\js\Ext.ux.datatip.js" />
     <include name="resources\js\Ext.ux.dd.GridDragDropRowOrder.js" />
     <include name="resources\js\GBIF.MetaMaker.Center.js" />
     <include name="resources\js\GBIF.MetaMaker.CenterTab.js" />
@@ -26,4 +27,5 @@
     <include name="resources\js\GBIF.MetaMaker.Properties.js" />
     <include name="resources\js\GBIF.MetaMaker.app.js" />
   </target>
+  <file name="resources\js\Ext.ux.datatip.js" path="" />
 </project>

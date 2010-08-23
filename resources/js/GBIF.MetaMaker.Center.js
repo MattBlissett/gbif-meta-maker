@@ -50,7 +50,12 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 //			console.log(node, state);
 			switch( node.attributes.type ) {
 				case 'core':
-					if (state == false) return;
+					if (state == false) {
+						this.extensionsTree.suspendEvents();						
+							node.getUI().toggleCheck(true);			
+						this.extensionsTree.resumeEvents();
+						return;
+					}
 					
 					var previousCoreItem = this.extensionsTree.toggleCore( node.id, state );
 					this.metaMakerCenterTab.hideTabStripItem("core-" + previousCoreItem);

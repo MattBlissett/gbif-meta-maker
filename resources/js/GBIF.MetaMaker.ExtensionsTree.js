@@ -43,7 +43,7 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 		,	rootVisible: false
 		,	autoScroll: true
 		,	plugins: new Ext.ux.DataTip({
-					tpl: 'Description: {description}<br>Examples: {examples}'
+					tpl: 'Description: {description}<br><br>Examples: {examples}'
 			})		
 		,	loader: new Ext.tree.TreeLoader({
 //					dataUrl: 'resources/api/proxy.php?url=http://gbrds.gbif.org/registry/ipt/extensions.json&type=json'
@@ -74,8 +74,7 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 		}
 
 	,	toggleCore: function(id, state) {
-			if (state == false) return;
-//console.log(id, state, this.oldCore);		
+			if (state == false) return(false);
 			this.suspendEvents();
 			if ( id == 'taxon' ) {
 				this.getNodeById('occurrences').getUI().toggleCheck();
@@ -138,6 +137,7 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 				if (n.attributes.checked) {
 					n.getUI().addClass("required");
 					n.iconCls = "iconRequired";
+					n.disabled = true;
 				}
 				if (n) {
 					node.appendChild(n);

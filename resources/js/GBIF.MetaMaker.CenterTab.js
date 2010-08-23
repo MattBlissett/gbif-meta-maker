@@ -84,25 +84,20 @@ Ext.extend(GBIF.MetaMaker.CenterTab,Ext.TabPanel,  {
 	
 							if (tab.type == 'core') {
 								var tmpProp = tab.fileSettings.prop.getSource();
-//								console.log(tmpProp);
 								if (Ext.isEmpty(tmpProp)) {
 									tmpProp = {
-										foo: "bar",
-										"Field Delimiter": "\\t"
+											'File Encoding': 'UTF-8'
+										,	'Field Delimiter': '\\t'
+										,	'Fields enclosed by': '\"\"'
+										,	'Line ending': '\\r\\n'
+										,	'Ignore header row': true
 									}
 								}
-/*								
-								var prop = {
-									fieldTerminatedBy: tmpProp.FieldDelimiter || null
-								}
-								console.log(prop);
-*/								
-//console.log(tab.fileSettings.prop.getSource() );
+
 								var tmpRec = {
 										name: tab.title
 									,	rowType: tab.url
 									,	filename: tab.extension.filename.getValue()
-//									,	fileSettings: prop
 									,	fileSettings: tmpProp
 									,	fields: []
 								}
