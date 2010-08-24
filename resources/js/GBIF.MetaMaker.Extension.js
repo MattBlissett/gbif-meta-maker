@@ -50,6 +50,12 @@ GBIF.MetaMaker.Extension = function(config){
 		,	enableHdMenu: false
     ,	listeners: {
         render: function(g) {
+					if (this.ownerCt.type == "ext") {
+						this.store.loadData([["Core ID", "", true]], true );
+					} else {
+						this.store.loadData([["ID", "", true]], true );
+					}
+					
 					var ddrow = new Ext.ux.dd.GridReorderDropTarget(g, {
 							copy: false
 							,listeners: {
@@ -78,7 +84,9 @@ GBIF.MetaMaker.Extension = function(config){
             Ext.dd.ScrollManager.unregister(g.getView().getEditorParent());
         }
 			,	beforeedit: function(e) {
-					if (e.record.data.term == "Spacer") {
+					if ((e.record.data.term == "Spacer")
+					|| (e.record.data.term == "ID")
+					|| (e.record.data.term == "Core ID")) {
 						return( false );
 					}
 //						console.log( this, e );					

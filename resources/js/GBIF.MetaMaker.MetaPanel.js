@@ -49,18 +49,26 @@ GBIF.MetaMaker.MetaPanel = function(config){
 				,		'\t\t&lt;files&gt;\r\n'
 				,			'\t\t\t&lt;location>{filename}&lt;/location&gt;\r\n'
 				,		'\t\t&lt;/files&gt;\r\n'
-				,		'\t\t&lt;id index="0"/&gt;\r\n'
 				,		'<tpl for="fields">'
 				,			'<tpl if="xindex &gt; 0">'
 				,				'<tpl if="term != \'Spacer\'">'
+
+				,				'<tpl if="term == \'ID\'">'
+				,					'\t\t&lt;id index="{[xindex-1]}"/&gt;\r\n'
+				,				'</tpl>'
+				
+
+				,				'<tpl if="term != \'ID\'">'
 				,					'\t\t&lt;field '
 				,						'<tpl if="static == \'\'">'
-				,							' index="{#}" '
+				,							' index="{[xindex-1]}" '
 				,						'</tpl>'
 				,						'<tpl if="static != \'\'">'
 				,							' default="{static}" '
 				,						'</tpl>'
 				,					'term="{qualName}"/&gt;\r\n'
+				,				'</tpl>'
+				
 				,				'</tpl>'
 				,			'</tpl>'
 				,		'</tpl>'
@@ -73,18 +81,25 @@ GBIF.MetaMaker.MetaPanel = function(config){
 				,			'\t\t\t&lt;location>{filename}&lt;/location&gt;\r\n'
 				,		'\t\t&lt;/files&gt;\r\n'
 
-				,		'\t\t&lt;coreid index="0"/&gt;\r\n'
-
 				,		'<tpl for="fields">'
 				,			'<tpl if="term != \'Spacer\'">'
+
+				,				'<tpl if="term == \'Core ID\'">'
+				,					'\t\t&lt;coreid index="{[xindex-1]}"/&gt;\r\n'
+				,				'</tpl>'
+				
+
+				,				'<tpl if="term != \'Core ID\'">'
 				,					'\t\t&lt;field '
 				,						'<tpl if="static == \'\'">'
-				,							' index="{#}" '
+				,							' index="{[xindex-1]}" '
 				,						'</tpl>'
 				,						'<tpl if="static != \'\'">'
 				,							' default="{static}" '
 				,						'</tpl>'
 				,					'term="{qualName}"/&gt;\r\n'
+				,				'</tpl>'
+				
 				,			'</tpl>'
 				,		'</tpl>'
 
