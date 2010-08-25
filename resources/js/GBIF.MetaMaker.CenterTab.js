@@ -87,8 +87,8 @@ Ext.extend(GBIF.MetaMaker.CenterTab,Ext.TabPanel,  {
 								if (Ext.isEmpty(tmpProp)) {
 									tmpProp = {
 											'File Encoding': 'UTF-8'
-										,	'Field Delimiter': '\\t'
-										,	'Fields enclosed by': '\"\"'
+										,	'Field Delimiter': ','
+										,	'Fields enclosed by': '"'
 										,	'Line ending': '\\r\\n'
 										,	'Ignore header row': true
 									}

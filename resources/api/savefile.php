@@ -1,6 +1,6 @@
 <?php
 
-	$data = $_REQUEST['data'];
+	$data = $_REQUEST['data'];	
 	
 	header('Content-type: text/xml');
 	header('Content-Disposition: attachment; filename="meta.xml"');

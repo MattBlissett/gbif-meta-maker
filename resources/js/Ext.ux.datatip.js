@@ -82,11 +82,23 @@ Ext.ux.DataTip = Ext.extend(Ext.ToolTip, (function() {
     function beforeTreeTipShow(tip) {
         var e = Ext.fly(tip.triggerElement).findParent('div.x-tree-node-el', null, true),
             node = e ? tip.host.getNodeById(e.getAttribute('tree-node-id', 'ext')) : null;
+			switch (node.attributes.type) {
+				case 'extension': 					
+					updateTip(tip, node.attributes);
+					break;
+				case 'attribute':
+					updateTip(tip, node.attributes);
+					break;
+				default:
+					return false;
+			}
+/*			
 		if(node.getUI().wasLeaf){
 			updateTip(tip, node.attributes);
 		}else{
 			return false;
 		 }
+*/		 
 	}
 
     function beforeGridTipShow(tip) {

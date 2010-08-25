@@ -43,7 +43,15 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 		,	rootVisible: false
 		,	autoScroll: true
 		,	plugins: new Ext.ux.DataTip({
-					tpl: 'Description: {description}<br><br>Examples: {examples}'
+					tpl:	
+							'<tpl if="type == \'extension\'">'
+						+ '<b>Identifier:</b> {identifier}<br><br>'
+						+ '<b>Subject:</b> {subject}<br><br>'
+						+ '<b>Description:</b> {description}'
+						+ '</tpl>'
+						+	'<tpl if="type == \'attribute\'">'
+						+ '<b>Description:</b> {description}<br><br><b>Examples:</b> {examples}'
+						+ '</tpl>'
 			})		
 		,	loader: new Ext.tree.TreeLoader({
 					dataUrl: 'resources/api/proxy.php?url=http://gbrds.gbif.org/registry/extensions.json&type=json&hide=true'
@@ -97,6 +105,8 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 					var n = this.createNode(o[i]);
 					n.text = o[i].title;
 					n.leaf = false;
+					n.attributes.subject = o[i].subject;
+					n.attributes.identifier = o[i].identifier;
 					n.attributes.type = 'extension';
 					n.attributes.checked = false;
 					n.iconCls = 'iconText';
@@ -104,6 +114,7 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 						node.appendChild(n);
 					}
 				}
+
 				node.endUpdate();
 				if (typeof callback == "function") {
 					callback(this, node);

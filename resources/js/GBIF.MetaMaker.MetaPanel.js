@@ -31,7 +31,7 @@ GBIF.MetaMaker.MetaPanel = function(config){
 					text: "Save File"
 				,	scope: this
 				, handler: function() {
-						window.location = "resources/api/savefile.php?data=" + encodeURI(this.body.dom.textContent);
+						window.location = "resources/api/savefile.php?data=" + encodeURIComponent(this.body.dom.textContent);
 				 	}
 			}, "->", "Metadata file describing dataset:"
 				, this.filename
@@ -56,7 +56,6 @@ GBIF.MetaMaker.MetaPanel = function(config){
 				,				'<tpl if="term == \'ID\'">'
 				,					'\t\t&lt;id index="{[xindex-1]}"/&gt;\r\n'
 				,				'</tpl>'
-				
 
 				,				'<tpl if="term != \'ID\'">'
 				,					'\t\t&lt;field '
@@ -118,7 +117,8 @@ GBIF.MetaMaker.MetaPanel = function(config){
 								}
 								
 								if (typeof o != 'undefined') {
-									return( o.replace(/\"/g, "\\\"") );
+									o = o.replace("(none)", "");
+									return( o.replace(/\"/g, "&amp;quot;") );
 								} else {
 									return("");
 								}

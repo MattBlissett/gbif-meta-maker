@@ -21,11 +21,35 @@ GBIF.MetaMaker.Properties = function(config){
 			fieldLabel: 'comboTerminatedBy'
 		,	name: 'comboTerminatedBy'
 		,	allowBlank: false
-		,	store: ['/r/n', '/n', '/r']
+		,	store: ['\\r\\n', '\\n', '\\r']
 		,	typeAhead: true
 		,	mode: 'local'
 		,	triggerAction: 'all'
-		,	emptyText:'-- Select Return Type--'
+		,	emptyText:'-- Select Type--'
+		,	selectOnFocus: true
+ });
+
+ var comboFieldDelimiter = new Ext.form.ComboBox({
+			fieldLabel: 'comboFieldDelimiter'
+		,	name: 'comboFieldDelimiter'
+		,	allowBlank: false
+		,	store: ['\\t', ',', ';', '|', ']']
+		,	typeAhead: true
+		,	mode: 'local'
+		,	triggerAction: 'all'
+		,	emptyText:'-- Select Type--'
+		,	selectOnFocus: true
+ });
+
+ var comboEnclosedBy = new Ext.form.ComboBox({
+			fieldLabel: 'comboEnclosedBy'
+		,	name: 'comboEnclosedBy'
+		,	allowBlank: false
+		,	store: ['(none)', '"', "'"]
+		,	typeAhead: true
+		,	mode: 'local'
+		,	triggerAction: 'all'
+		,	emptyText:'-- Select Type--'
 		,	selectOnFocus: true
  });
 
@@ -43,7 +67,6 @@ GBIF.MetaMaker.Properties = function(config){
 
 					switch (e.record.id) {
 						default:
-//							console.log( e, e.record, e.record.id );
 							return true;
 					}
 				}
@@ -51,6 +74,9 @@ GBIF.MetaMaker.Properties = function(config){
 		,	customEditors: {
 					'File Encoding': new Ext.grid.GridEditor(comboEncoding)
 				,	'Line ending': new Ext.grid.GridEditor(comboTerminatedBy)
+				,	'Line ending': new Ext.grid.GridEditor(comboTerminatedBy)
+				,	'Field Delimiter': new Ext.grid.GridEditor(comboFieldDelimiter)
+				,	'Fields enclosed by': new Ext.grid.GridEditor(comboEnclosedBy)				
 			}
 	});
 
