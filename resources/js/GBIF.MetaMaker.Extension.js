@@ -4,17 +4,29 @@ Ext.namespace('GBIF.MetaMaker');
 GBIF.MetaMaker.Extension = function(config){
 
  var store = new Ext.data.ArrayStore({
-		fields: [
-			 	{name: 'term'}
-			,	{name: 'dataType'}
-			,	{name: 'required'}
-			,	{name: 'static'}
-			,	{name: 'description'}
-			,	{name: 'qualName'}
-			,	{name: 'namespace'}
-			,	{name: 'relation'}
-		]
+			fields: [
+					{name: 'term'}
+				,	{name: 'dataType'}
+				,	{name: 'required'}
+				,	{name: 'static'}
+				,	{name: 'description'}
+				,	{name: 'qualName'}
+				,	{name: 'namespace'}
+				,	{name: 'relation'}
+				,	{name: 'global'}
+				,	{name: 'rIndex'}
+			]
+		,	listeners: {
+					load: this.reindex
+				,	remove: {	
+							fn: this.reindex
+						,	delay: 50
+					}
+				,	scope: this
+			}
 	});
+
+	this.offset = 0;
 
 	this.filename = new Ext.form.TextField({
 			width: 250
@@ -24,15 +36,14 @@ GBIF.MetaMaker.Extension = function(config){
 	Ext.apply(this, config, {
 			store: store
 		,	columns: [
-//          new Ext.grid.RowNumberer()
       		{header: '&nbsp;', width: 25, sortable: false, dataIndex: '', renderer: this.renderReorder}
+      	,	{header: '&nbsp;', width: 25, sortable: false, dataIndex: 'rIndex', renderer: this.renderIndex, scope: this, tooltip: 'Related column index based on your file.'}
       	,	{header: 'Term', width: 160, sortable: false, dataIndex: 'term'}
-//				,	{header: 'Data Type', width: 160, sortable: false, dataIndex: 'dataType'}
 				,	{header: 'Required', width: 160, sortable: false, dataIndex: 'required'}
-				,	{header: 'Static/Variable Mapping', width: 200,	dataIndex: 'static', editor: new Ext.form.TextField() }
+				,	{header: 'Static/Variable Mapping', width: 200,	dataIndex: 'static', editor: new Ext.form.TextField(), tooltip: 'Click row cell to add default value.' }
+				,	{header: 'Global', width: 44,	dataIndex: 'global', editor: new Ext.form.Checkbox(), tooltip: 'Check row cell to provide default without column index.' }
 			]
 		,	stripeRows: true
-//		,	title: 'Extension'
 		,	tbar: [{
 					text: 'Add Spacer'
 				,	handler: this.addSpacer
@@ -40,7 +51,6 @@ GBIF.MetaMaker.Extension = function(config){
 			}, "->", "Filename:"
 				, this.filename
 			]
-//    ,	ddGroup: 'testDDGroup'
     ,	enableDragDrop: true
 		,	sm: new Ext.grid.RowSelectionModel({singleSelect:true})
     ,	autoScroll: true
@@ -74,7 +84,7 @@ GBIF.MetaMaker.Extension = function(config){
 											// code goes here
 									}
 							}
-					});
+					}, this);
 
 					// if you need scrolling, register the grid view's scroller with the scroll manager
 					Ext.dd.ScrollManager.register(g.getView().getEditorParent());
@@ -89,7 +99,9 @@ GBIF.MetaMaker.Extension = function(config){
 					|| (e.record.data.term == "Core ID")) {
 						return( false );
 					}
-//						console.log( this, e );					
+				}
+			,	afteredit: function(e) {
+					e.grid.reindex();
 				}
 			,	rowcontextmenu: this.rightClickMenu
     }
@@ -108,6 +120,32 @@ Ext.extend(GBIF.MetaMaker.Extension, Ext.grid.EditorGridPanel, {
 	,	renderReorder: function(value) {
 			var html = '<img qtip="Click and drag row to reorder." src="resources/images/icons/vert.png">';
 			return(html);
+		}
+
+	,	renderIndex: function(value, e, record, index) {
+//console.log("update view", record.data.rIndex, value, e, record, index );
+			if (record.data.rIndex != -1) {			
+				return(record.data.rIndex);
+			} else {
+				return('');
+			}
+		}
+
+	,	reindex: function() {
+//			console.log("reindex", this, this.store, this.store.data, this.store.data.items );
+			var i = 0;
+			this.offset = 1;
+			this.store.data.each(function() {
+				if (!this.data.global) {
+					this.data.rIndex = i;
+					i++;
+				} else {
+					this.offset++;
+					this.data.rIndex = -1;
+				}
+			});
+			
+			this.getView().refresh();
 		}
 		
 	,	rightClickMenu: function(grid, row, e){

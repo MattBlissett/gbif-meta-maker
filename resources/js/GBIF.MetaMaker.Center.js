@@ -3,7 +3,6 @@ Ext.namespace('GBIF.MetaMaker');
 
 GBIF.MetaMaker.Center = function(config){
 
-//	this.metaSources = new GBIF.MetaSources({region : 'west'});
 	this.metaMakerCenterTab = new GBIF.MetaMaker.CenterTab({region: 'center'});
 	this.extensionsTree = new GBIF.MetaMaker.ExtensionsTree({
 			region: 'west'
@@ -37,7 +36,6 @@ GBIF.MetaMaker.Center = function(config){
 Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 	
 		loadExtension: function( node ) {
-//			console.log( this, node );
 		}
 
 	,	activateTab: function( node ) {
@@ -114,9 +112,8 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 						node.parentNode.getUI().toggleCheck();
 					}
 
-//console.log( prefix );					
 					var tmpTab = this.metaMakerCenterTab.findById( prefix + "-" + node.parentNode.id );
-//console.log(tmpTab);					
+
 					if (tmpTab) {
 						this.metaMakerCenterTab.unhideTabStripItem( prefix + "-" + node.parentNode.id );
 						this.metaMakerCenterTab.setActiveTab( prefix + "-" + node.parentNode.id );
@@ -131,7 +128,7 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 						this.metaMakerCenterTab.add( tmpTab );
 						this.metaMakerCenterTab.setActiveTab( tmpTab.id );
 					}
-//					console.log(node.attributes);
+
 					if (state) {
 						tmpTab.extension.store.loadData([[
 								node.attributes.term
