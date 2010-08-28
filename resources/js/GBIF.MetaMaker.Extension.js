@@ -39,9 +39,9 @@ GBIF.MetaMaker.Extension = function(config){
       		{header: '&nbsp;', width: 25, sortable: false, dataIndex: '', renderer: this.renderReorder}
       	,	{header: '&nbsp;', width: 25, sortable: false, dataIndex: 'rIndex', renderer: this.renderIndex, scope: this, tooltip: 'Related column index based on your file.'}
       	,	{header: 'Term', width: 160, sortable: false, dataIndex: 'term'}
-				,	{header: 'Required', width: 160, sortable: false, dataIndex: 'required'}
-				,	{header: 'Static/Variable Mapping', width: 200,	dataIndex: 'static', editor: new Ext.form.TextField(), tooltip: 'Click row cell to add default value.' }
-				,	{header: 'Global', width: 44,	dataIndex: 'global', editor: new Ext.form.Checkbox(), tooltip: 'Check row cell to provide default without column index.' }
+				,	{header: 'Required', width: 60, sortable: false, dataIndex: 'required', renderer: this.renderCheckbox}
+				,	{header: 'Default Value', width: 200,	dataIndex: 'static', editor: new Ext.form.TextField(), tooltip: 'Click row cell to add default value.' }
+				,	{header: 'Global', width: 44,	dataIndex: 'global', editor: new Ext.form.Checkbox(), tooltip: 'Check row cell to provide default without column index.', renderer: this.renderCheckbox }
 			]
 		,	stripeRows: true
 		,	tbar: [{
@@ -105,6 +105,23 @@ GBIF.MetaMaker.Extension = function(config){
 				}
 			,	rowcontextmenu: this.rightClickMenu
     }
+
+		,	view: new Ext.grid.GridView({
+				getRowClass : function(record, index){
+					var cls = '';
+					if (record.data.required == "true") {
+						cls = 'row-required';
+					}
+					if ((record.data.term == 'ID')
+					|| (record.data.term == 'Core ID')) {
+						cls = 'row-required';
+					}
+					if (record.data.term == 'Spacer') {
+						cls = 'row-spacer';
+					}
+					return cls;
+				}
+			})
 	});
 
 	GBIF.MetaMaker.Extension.superclass.constructor.call(this, config);
@@ -120,6 +137,10 @@ Ext.extend(GBIF.MetaMaker.Extension, Ext.grid.EditorGridPanel, {
 	,	renderReorder: function(value) {
 			var html = '<img qtip="Click and drag row to reorder." src="resources/images/icons/vert.png">';
 			return(html);
+		}
+
+	,	renderCheckbox: function(value) {
+			return (value == true || value == "true") ? "<img src=\"resources/images/icons/accept.png\">" : "";
 		}
 
 	,	renderIndex: function(value, e, record, index) {

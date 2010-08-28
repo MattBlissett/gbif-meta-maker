@@ -222,3 +222,11 @@ a:active {
 .x-tree-node .x-tree-node-disabled a span{
 	color:black !important;
 }
+
+.row-required {
+	background-color: #E4FCE0;
+}
+
+.row-spacer {
+	background-color: #FFC;
+}

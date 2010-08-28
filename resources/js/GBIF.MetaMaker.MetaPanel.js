@@ -54,7 +54,7 @@ GBIF.MetaMaker.MetaPanel = function(config){
 				,				'<tpl if="term != \'Spacer\'">'
 
 				,				'<tpl if="term == \'ID\'">'
-				,					'\t\t&lt;id index="{[xindex-1]}"/&gt;\r\n'
+				,					'\t\t&lt;id index="{rIndex}"/&gt;\r\n'
 				,				'</tpl>'
 
 				,				'<tpl if="term != \'ID\'">'
@@ -135,6 +135,33 @@ Ext.extend(GBIF.MetaMaker.MetaPanel, Ext.Panel, {
 
 	generateXML: function() {
 		this.metaData.metadata = this.filename.getValue();
+		
+		Ext.each(this.metaData.extensions, function(extension) {
+			var pos = -1;
+			var idRec = null;
+			Ext.each(extension.fields, function(field, index) {
+				if (field.term == "Core ID") {
+					pos = index;
+					idRec = field;
+				}
+			});
+			extension.fields.splice(pos, 1);
+			extension.fields.unshift(idRec);
+		});
+
+		Ext.each(this.metaData.core, function(extension) {
+			var pos = -1;
+			var idRec = null;
+			Ext.each(extension.fields, function(field, index) {
+				if (field.term == "ID") {
+					pos = index;
+					idRec = field;
+				}
+			});
+			extension.fields.splice(pos, 1);
+			extension.fields.unshift(idRec);
+		});
+		
 		this.tpl.overwrite(this.body, this.metaData);
 	}
 
