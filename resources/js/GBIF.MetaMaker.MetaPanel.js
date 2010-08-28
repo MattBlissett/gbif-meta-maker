@@ -145,21 +145,26 @@ Ext.extend(GBIF.MetaMaker.MetaPanel, Ext.Panel, {
 					idRec = field;
 				}
 			});
-			extension.fields.splice(pos, 1);
-			extension.fields.unshift(idRec);
+			if (pos != -1) {
+				extension.fields.splice(pos, 1);
+				extension.fields.unshift(idRec);
+			}
 		});
 
 		Ext.each(this.metaData.core, function(extension) {
 			var pos = -1;
 			var idRec = null;
 			Ext.each(extension.fields, function(field, index) {
+
 				if (field.term == "ID") {
 					pos = index;
 					idRec = field;
 				}
 			});
-			extension.fields.splice(pos, 1);
-			extension.fields.unshift(idRec);
+			if (pos != -1) {
+				extension.fields.splice(pos, 1);
+				extension.fields.unshift(idRec);
+			}
 		});
 		
 		this.tpl.overwrite(this.body, this.metaData);
