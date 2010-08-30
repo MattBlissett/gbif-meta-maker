@@ -25,8 +25,8 @@ Ext.onReady(function() {
 				 '<a href="http://www.gbif.org/" target="_blank" class="gbif">'+
 					 '<img src="resources/images/gbif.jpg" alt="GBif" width="104" height="90" border="0" /></a>'+
 				 '<div class="header-text">'+
-					 '<h1>MetaMaker v1.0</h1>'+
-					 '<p><i>GBIF metafile creation tool</i></p>'+
+					 '<h1>Darwin Core Archive Assistant</h1>'+
+					 '<p><i>A tool for assisting in the publishing of biodiversity data</i></p>'+
 				 '</div></div>'
 	}
 			
