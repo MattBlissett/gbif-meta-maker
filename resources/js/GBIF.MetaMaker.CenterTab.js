@@ -7,8 +7,9 @@ GBIF.MetaMaker.CenterTab = function(config){
 	this.aboutPanel = new Ext.Panel({
 			title: 'About'
 		,	autoLoad: 'resources/docs/about.html'
-		,	padding: 5
+		,	padding: 10
 		,	bodyStyle: 'font-size: 12px'
+		,	autoScroll: true
 	});
 	
 	this.coreSpecimensPanel = new GBIF.MetaMaker.ExtensionPanel({
