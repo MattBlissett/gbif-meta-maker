@@ -26,7 +26,7 @@ Ext.onReady(function() {
 					 '<img src="resources/images/gbif.jpg" alt="GBif" width="104" height="90" border="0" /></a>'+
 				 '<div class="header-text">'+
 					 '<h1>Darwin Core Archive Assistant</h1>'+
-					 '<p><i>A tool for assisting in the publishing of biodiversity data</i></p>'+
+					 '<p><i>A tool to assist in the publication of biodiversity data</i></p>'+
 				 '</div></div>'
 	}
 			
