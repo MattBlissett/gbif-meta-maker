@@ -128,38 +128,52 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 			var xml = response.responseXML;
 			
 			var root = xml.documentElement;
-			var q = Ext.DomQuery;
+			var q = Ext.DomQuery;						
 			Ext.each( q.select("property", root), function( record ) {
-				node.beginUpdate();
-				var n = this.createNode({});
-				n.text = record.getAttribute("name");
-				n.leaf = true;
-				n.url = record.getAttribute("url");
-				n.attributes.type = 'attribute';
-				n.attributes.term = record.getAttribute("name");
-				n.attributes.namespace = record.getAttribute("namespace");
-				n.attributes.qualName = record.getAttribute("qualName");
-				n.attributes.thesaurus = record.getAttribute("thesaurus");
-				n.attributes.required = record.getAttribute("required");
-				n.attributes.description = record.getAttribute("description");
-				n.attributes.examples = record.getAttribute("examples");
-				n.attributes.checked = (n.attributes.required == "true") ? true : false;
-				n.iconCls = 'iconText';
-				if (n.attributes.checked) {
-					n.getUI().addClass("required");
-					n.iconCls = "iconRequired";
-					n.disabled = true;
+
+				skip = false;
+				if ( (node.id == "taxon") && (record.getAttribute("name") == "taxonID") ) {
+					skip = true;
 				}
-				if (n) {
-					node.appendChild(n);
+				
+				if ( (node.id == "occurrences") && (record.getAttribute("name") == "occurrenceID") ) {
+					skip = true;
 				}
-				node.endUpdate();
-				if (typeof callback == "function") {
-					callback(this, node);
+
+				// Skip and do not add node
+				if (!skip) {
+					node.beginUpdate();
+					var n = this.createNode({});
+					n.text = record.getAttribute("name");
+					n.leaf = true;
+					n.url = record.getAttribute("url");
+					n.attributes.type = 'attribute';
+					n.attributes.term = record.getAttribute("name");
+					n.attributes.namespace = record.getAttribute("namespace");
+					n.attributes.qualName = record.getAttribute("qualName");
+					n.attributes.thesaurus = record.getAttribute("thesaurus");
+					n.attributes.required = record.getAttribute("required");
+					n.attributes.description = record.getAttribute("description");
+					n.attributes.examples = record.getAttribute("examples");
+					n.attributes.checked = (n.attributes.required == "true") ? true : false;
+					n.iconCls = 'iconText';
+					if (n.attributes.checked) {
+						n.getUI().addClass("required");
+						n.iconCls = "iconRequired";
+						n.disabled = true;
+					}
+					if (n) {
+						node.appendChild(n);
+					}
+					node.endUpdate();
+					if (typeof callback == "function") {
+						callback(this, node);
+					}
+					if (n.attributes.checked) {
+						n.fireEvent('checkchange', n, true);
+					}
 				}
-				if (n.attributes.checked) {
-					n.fireEvent('checkchange', n, true);
-				}
+				
 			}, this);
 		}
 });
