@@ -47,6 +47,7 @@ GBIF.MetaMaker.Extension = function(config){
 		,	tbar: [{
 					text: 'Add Spacer'
 				,	handler: this.addSpacer
+				,	iconCls: 'iconSpacer'
 				,	scope: this
 			}, "->", "Filename:"
 				, this.filename

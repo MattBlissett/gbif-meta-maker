@@ -30,8 +30,16 @@ GBIF.MetaMaker.MetaPanel = function(config){
 		,	tbar: [{
 					text: "Save File"
 				,	scope: this
+				,	iconCls: 'iconSave'
 				, handler: function() {
 						window.location = "resources/api/savefile.php?data=" + encodeURIComponent(this.body.dom.textContent);
+				 	}
+			}, ' ', {
+					text: "Validate"
+				,	scope: this
+				,	iconCls: 'iconValidate'
+				, handler: function() {
+						window.open("http://tools.gbif.org/dwca-validator/validate.do?meta=" + encodeURIComponent(this.body.dom.textContent),'_blank');
 				 	}
 			}, "->", "Metadata file describing dataset:"
 				, this.filename

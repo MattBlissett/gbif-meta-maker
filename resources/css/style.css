@@ -119,6 +119,18 @@
   background-image:url(../images/icons/page_white_text.png) !important;
 }
 
+.iconSpacer {
+  background-image:url(../images/icons/textfield.png) !important;
+}
+
+.iconSave {
+  background-image:url(../images/icons/page_save.png) !important;
+}
+
+.iconValidate {
+  background-image:url(../images/icons/page_gear.png) !important;
+}
+
 .iconTextSyn {
   background-image:url(../images/icons/page_white_text_syn.png) !important;
 }
