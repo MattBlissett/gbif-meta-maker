@@ -55,7 +55,6 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 			})		
 		,	loader: new Ext.tree.TreeLoader({
 					dataUrl: 'resources/api/proxy.php?url=http://gbrds.gbif.org/registry/extensions.json&type=json&hide=true'
-//					dataUrl: 'extensions.json'
 				,	listeners: {
 							beforeload: this.testNodeUri
 						,	scope: this
@@ -101,12 +100,12 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 				var o = eval("(" + json + ")");
 				o = o.extensions;
 				node.beginUpdate();
-				for (var i = 0, len = o.length; i < len; i++) {
+				for (var i = 0, len = o.length; i < len; i++) {				
 					var n = this.createNode(o[i]);
 					n.text = o[i].title;
-					n.leaf = false;
 					n.attributes.subject = o[i].subject;
 					n.attributes.identifier = o[i].identifier;
+					n.leaf = false;
 					n.attributes.type = 'extension';
 					n.attributes.checked = false;
 					n.iconCls = 'iconText';

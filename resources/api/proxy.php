@@ -14,16 +14,19 @@
 	$s_list = array('dc:description=');
 	$r_list = array('description=');
 	$output = str_replace($s_list, $r_list, $response);
+
 	if ($_REQUEST['hide']) {
-		$tmp = json_decode($output, true);		
-		for($i=0; $i<= count($tmp["extensions"]); $i++) {
-			if (($tmp["extensions"][$i]["title"] == "Darwin Core Occurrence")
-			|| ($tmp["extensions"][$i]["title"] == "Darwin Core Taxon")) {
-				unset($tmp["extensions"][$i]);
+		$tmp = json_decode($output);
+		foreach($tmp->extensions as $key => $rec) {
+			if (($rec->title == "Darwin Core Occurrence")
+			|| ($rec->title == "Darwin Core Taxon")) {
+				unset($tmp->extensions[$key]);
 			}
 		}
+		$tmp->extensions = array_values($tmp->extensions);
 		$output = json_encode($tmp);
 	}
+
 	print $output;
 
 ?>
