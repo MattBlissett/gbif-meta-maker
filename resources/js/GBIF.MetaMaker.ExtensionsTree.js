@@ -26,7 +26,7 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 								,	url: 'http://rs.gbif.org/core/dwc_taxon.xml'
 							}, {
 									text: 'Occurrences'
-								,	id: 'occurrences'
+								,	id: 'occurrence'
 								,	leaf: false
 								,	checked: false
 								,	type: 'core'
@@ -34,6 +34,7 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 							}]
 					}, {
 							text: 'Extensions'
+						,	id: 'extensions'
 						,	type: 'root'
 						,	expanded: true
 						,	iconCls: 'iconBook'
@@ -84,14 +85,34 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 			if (state == false) return(false);
 			this.suspendEvents();
 			if ( id == 'taxon' ) {
-				this.getNodeById('occurrences').getUI().toggleCheck();
-				this.oldCore = "occurrences";
+				this.getNodeById('occurrence').getUI().toggleCheck();
+				this.oldCore = "occurrence";
 			} else {
 				this.getNodeById('taxon').getUI().toggleCheck();
 				this.oldCore = "taxon";
 			}
 			this.resumeEvents();
+			this.disableExtensions(id);
 			return(this.oldCore);
+		}
+
+	,	disableExtensions: function(activeCore) {
+			if (activeCore == '') {
+				activeCore = "taxon";
+			}
+			var extensions = this.getNodeById('extensions');
+			extensions.eachChild(function(record) {
+				var found = record.attributes.subject.search(eval("/" + activeCore + "/i"));
+				if (found == -1) {
+					record.disable();
+					if (record.getUI().isChecked()) {
+						record.getUI().toggleCheck();
+						record.collapse();
+					}
+				} else {
+					record.enable();
+				}
+			});
 		}
 
 	,	extensionsResponse: function(response, node, callback){
@@ -135,7 +156,7 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 					skip = true;
 				}
 				
-				if ( (node.id == "occurrences") && (record.getAttribute("name") == "occurrenceID") ) {
+				if ( (node.id == "occurrence") && (record.getAttribute("name") == "occurrenceID") ) {
 					skip = true;
 				}
 

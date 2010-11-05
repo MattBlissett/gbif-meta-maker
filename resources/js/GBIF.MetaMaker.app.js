@@ -1,5 +1,17 @@
 Ext.namespace('GBIF');
 
+Sorter = function(n1, n2){
+	var desc = false;
+	var	v1 = n1.text.toUpperCase();
+	var	v2 = n2.text.toUpperCase();            
+	if(v1 < v2){
+		return desc ? 1 : -1;
+	} else if(v1 > v2){
+		return desc ? -1 : 1;
+	}
+	return 0;
+};
+		
 Ext.onReady(function() {
 
 	// Disable browser right click

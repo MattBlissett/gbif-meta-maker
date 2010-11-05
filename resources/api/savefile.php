@@ -1,9 +1,10 @@
 <?php
 
-	$data = $_REQUEST['data'];	
-	
+	$data = $_REQUEST['data'];		
 	header('Content-type: text/xml');
 	header('Content-Disposition: attachment; filename="meta.xml"');
-	$data = stripslashes($data);
+	if (get_magic_quotes_gpc()) {
+		$data = stripslashes($data);
+	}
 	print $data;
 ?>

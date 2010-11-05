@@ -11,10 +11,24 @@ GBIF.MetaMaker.Center = function(config){
 		,	maxWidth: 250
 		,	split: true
 		,	listeners: {
-					dblclick: this.loadExtension				
+					dblclick: this.loadExtension		
 				,	checkchange: this.checkchange
 				,	click: this.activateTab
 				,	scope: this
+				,	contextmenu: function(node) {
+						node.select();
+						if (node.attributes.type == 'core' || node.attributes.type == 'extension') {
+							var menu = new Ext.menu.Menu();            
+							menu.add(new Ext.menu.Item({
+									text: 'Sort Fields'
+								,	scope: node
+								, handler: function() {
+										this.sort(Sorter);
+									}
+							}));
+							menu.show(node.ui.getAnchor());
+						}
+					}					
 			}
 	}, this);
 	

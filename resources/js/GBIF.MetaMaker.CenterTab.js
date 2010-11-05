@@ -21,7 +21,7 @@ GBIF.MetaMaker.CenterTab = function(config){
 	});
 
 	this.coreObservationsPanel = new GBIF.MetaMaker.ExtensionPanel({
-			id: 'core-occurrences'
+			id: 'core-occurrence'
 		,	title: 'Occurrences'
 		,	type: 'core'
 		,	skip: true
@@ -41,7 +41,7 @@ GBIF.MetaMaker.CenterTab = function(config){
 		,	listeners: {
 					tabchange: this.checkTab
 				,	render: function() {
-						this.hideTabStripItem("core-occurrences");
+						this.hideTabStripItem("core-occurrence");
 					}
 			}
 	});

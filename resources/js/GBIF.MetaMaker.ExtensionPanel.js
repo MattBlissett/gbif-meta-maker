@@ -16,7 +16,7 @@ GBIF.MetaMaker.ExtensionPanel = function(config){
 	}, this);
 	
 	Ext.apply(this, config, {
-			layout : 'border'
+			layout: 'border'
 		,	defaults: {
 				border: false
 			}
@@ -31,5 +31,4 @@ GBIF.MetaMaker.ExtensionPanel = function(config){
 }	
 
 Ext.extend(GBIF.MetaMaker.ExtensionPanel,Ext.Panel,  {
-	
 });
