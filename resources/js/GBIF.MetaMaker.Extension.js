@@ -15,6 +15,7 @@ GBIF.MetaMaker.Extension = function(config){
 				,	{name: 'relation'}
 				,	{name: 'global'}
 				,	{name: 'rIndex'}
+				,	{name: 'vocabulary'}
 			]
 		,	listeners: {
 					load: this.reindex
@@ -38,10 +39,11 @@ GBIF.MetaMaker.Extension = function(config){
 		,	columns: [
       		{header: '&nbsp;', width: 25, sortable: false, dataIndex: '', renderer: this.renderReorder}
       	,	{header: '&nbsp;', width: 25, sortable: false, dataIndex: 'rIndex', renderer: this.renderIndex, scope: this, tooltip: 'Related column index based on your file.'}
-      	,	{header: 'Term', width: 160, sortable: false, dataIndex: 'term'}
+      	,	{header: 'Term', width: 140, sortable: false, dataIndex: 'term'}
 				,	{header: 'Required', width: 60, sortable: false, dataIndex: 'required', renderer: this.renderCheckbox}
 				,	{header: 'Default Value', width: 200,	dataIndex: 'static', editor: new Ext.form.TextField(), tooltip: 'Click row cell to add default value.' }
 				,	{header: 'Global', width: 44,	dataIndex: 'global', editor: new Ext.form.Checkbox(), tooltip: 'Check row cell to provide default without column index.', renderer: this.renderCheckbox }
+				,	{header: 'Vocabulary', width: 200,	dataIndex: 'vocabulary', editor: new Ext.form.TextField(), tooltip: 'Click row cell to add default value.<br><br>A URI that identifies a vocabulary used for the values found for the field in the source files. The URI ideally should resolve to some machine readable definition like SKOS, RDF, the GBIF vocabulary schema or a simple text file as often found for ISO or RFC standards. E.g. http://rs.gbif.org/vocabulary/gbif/nomenclatural_code.xml;<br>http://www.ietf.org/rfc/rfc3066.txt;<br>http://www.iso.org/iso/list-en1-semic-3.txt'}
 			]
 		,	stripeRows: true
 		,	tbar: [{

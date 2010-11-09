@@ -78,6 +78,7 @@ Ext.extend(GBIF.MetaMaker.CenterTab,Ext.TabPanel,  {
 										,	qualName: rec.data.qualName
 										,	rIndex: rec.data.rIndex
 										,	global: rec.data.global
+										,	vocabulary: rec.data.vocabulary
 									});
 								});
 								panel.metaData.extensions.push(tmpRec);
@@ -114,6 +115,7 @@ Ext.extend(GBIF.MetaMaker.CenterTab,Ext.TabPanel,  {
 										,	qualName: rec.data.qualName
 										,	rIndex: rec.data.rIndex
 										,	global: rec.data.global
+										,	vocabulary: rec.data.vocabulary										
 									});
 								});
 								panel.metaData.core.push(tmpRec);
