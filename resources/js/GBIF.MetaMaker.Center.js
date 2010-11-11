@@ -14,6 +14,7 @@ GBIF.MetaMaker.Center = function(config){
 					dblclick: this.loadExtension		
 				,	checkchange: this.checkchange
 				,	click: this.activateTab
+				,	beforeexpandnode: this.checkDisabled
 				,	scope: this
 				,	contextmenu: function(node) {
 						node.select();
@@ -57,7 +58,12 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 				this.metaMakerCenterTab.setActiveTab( "extension-" + node.id );
 			}
 		}
-		
+
+	,	checkDisabled: function(node) {
+//			console.log(this, node);
+			return(!node.disabled);
+		}
+
 	,	checkchange: function( node, state ) {
 //			console.log(node, state);
 			switch( node.attributes.type ) {

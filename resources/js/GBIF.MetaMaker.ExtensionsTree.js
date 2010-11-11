@@ -95,7 +95,7 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 			this.disableExtensions(id);
 			return(this.oldCore);
 		}
-
+	
 	,	disableExtensions: function(activeCore) {
 			if (activeCore == '') {
 				activeCore = "taxon";
