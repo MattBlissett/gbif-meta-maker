@@ -42,6 +42,7 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 			})
 		,	useArrows: true
 		,	rootVisible: false
+		,	animate: false
 		,	autoScroll: true
 		,	plugins: new Ext.ux.DataTip({
 					tpl:	
@@ -189,7 +190,8 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 					if (typeof callback == "function") {
 						callback(this, node);
 					}
-					if (n.attributes.checked) {
+
+					if (n.attributes.checked && !n.parentNode.disabled) {
 						n.fireEvent('checkchange', n, true);
 					}
 				}
