@@ -38,6 +38,15 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 						,	type: 'root'
 						,	expanded: true
 						,	iconCls: 'iconBook'
+						,	listeners: {
+									expand: {
+											fn: function() {
+												this.disableExtensions('taxon');
+											}
+										,	single: true
+										,	scope: this
+									}
+							}
 					}]
 			})
 		,	useArrows: true
