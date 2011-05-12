@@ -23,15 +23,17 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 								,	leaf: false
 								,	checked: true
 								,	type: 'core'
-								,	name: 'Taxon'
+								,	title: 'Taxon'
 								,	url: 'http://rs.gbif.org/core/dwc_taxon.xml'
+								,	identifier: 'http://rs.tdwg.org/dwc/terms/Taxon'
 							}, {
 									text: 'Occurrences'
 								,	id: 'occurrence'
 								,	leaf: false
 								,	checked: false
 								,	type: 'core'
-								,	name: 'Occurrence'
+								,	title: 'Occurrences'
+								,	identifier: 'http://rs.tdwg.org/dwc/terms/Occurrence'
 								,	url: 'http://rs.gbif.org/core/dwc_occurrence.xml'
 							}]
 					}, {

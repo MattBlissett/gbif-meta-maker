@@ -35,6 +35,8 @@ GBIF.MetaMaker.Center = function(config){
 	this.metaMakerCenterTab.metaPanel.on('loadXML', this.loadXML, this);	
 	Ext.apply(this, config, {
 			layout : 'border'
+		,	newMetaData: ''
+		,	indexArray: []
 		,	defaults: {
 				border: false
 			}
@@ -55,11 +57,16 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 	,	loadXML: function(me){
 			var xmlTag = me.currentXml
 			if(Ext.isDefined(xmlTag.archive)){
-				this.loadTreeNode( xmlTag.archive.core);
+				this.newMetaData = Ext.isDefined(xmlTag.archive.metadata)? xmlTag.archive.metadata: '';
+				this.loadTreeNode( xmlTag.archive.core, 'firstChild');
 				if(Ext.isDefined(xmlTag.archive.extension)){
-			//		for(var i=0; i< xmlTag.archive.extension.length; i++){
-				//		this.loadTreeNode( xmlTag.archive.extension);
-			//		}
+					if(Ext.isDefined(xmlTag.archive.extension.length)){
+						for(var i=0; i< xmlTag.archive.extension.length; i++){
+							this.loadTreeNode( xmlTag.archive.extension[i], 'lastChild');
+						}
+					}else{
+						this.loadTreeNode( xmlTag.archive.extension, 'lastChild');
+					}	
 				}
 				console.log(xmlTag);
 				me.loadXml.close();
@@ -67,35 +74,102 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 				alert('Invalid XML');
 			}	
 		}
-	,	loadTreeNode: function(data){
-			var ignoreHeaderRow = (data.ignoreheaderlines == 1)? true : false;
-			var currentNode = data.rowtype.split('/');
+	,	getName: function(value){
+			var currentNode = value.split('/');
 			var length = currentNode.length;
-			var currentNode = currentNode[length-1];
-			var treeNode = this.extensionsTree.getRootNode().firstChild.childNodes;
-			for(var i=0; i<treeNode.length; i++){
-				if((currentNode == treeNode[i].attributes.name)){
-					treeNode[i].getUI().toggleCheck();
-					var currentTree = treeNode[i];
-					this.extensionsTree.loader.on('load', function(){
-						this.setValues(data, currentTree)
-					}, this, {single: true});
-				}	
-			};
+			return currentNode[length-1];	
+		}	
+	,	loadTreeNode: function(data, child){
+			if(Ext.isDefined(data.rowtype)){
+				var currentNode = this.getName(data.rowtype);
+				if(child == "firstChild"){
+					var treeNode = this.extensionsTree.getRootNode().firstChild.childNodes;
+				}else if(child == "lastChild"){
+					var treeNode = this.extensionsTree.getRootNode().lastChild.childNodes;
+				}
+				for(var i=0; i<treeNode.length; i++){
+					var identifier = this.getName(treeNode[i].attributes.identifier);
+					if((currentNode == identifier )){
+						treeNode[i].getUI().toggleCheck();
+						var currentTree = treeNode[i];
+						this.extensionsTree.loader.on('load', function(){
+							this.indexArray = [];
+							this.setValues(data, currentTree, child)
+						}, this );
+					}	
+				}
+			}	
 		}
-	,	setValues: function(data, currentTree){
+	,	setValues: function(data, currentTree, child){
+			var ignoreHeaderRow = (data.ignoreheaderlines == 1)? true : false;
+			var linesterminatedby = (Ext.encode(data.linesterminatedby)=='{}')? data.linesterminatedby : '';
 			this.metaMakerCenterTab.items.each(function(item){
-				if(item.title == currentTree.text){
+				if(item.title == currentTree.attributes.title){
 					item.fileSettings.prop.setSource({
 							'File Encoding': data.encoding
 						,	'Field Delimiter': data.fieldsterminatedby
 						,	'Fields enclosed by': data.fieldsenclosedby
-						,	'Line ending': data.linesterminatedby
-						,	'Ignore header row': data.ignoreHeaderRow
+						,	'Line ending': linesterminatedby
+						,	'Ignore header row': ignoreHeaderRow
 					});
+					if(Ext.isDefined(data.field)){
+						if(Ext.isDefined(data.field.length)){
+							for(var i=0; i< data.field.length; i++){
+								this.setField(data.field[i], currentTree, item);
+							}
+						}else{
+							this.setField(data.field, currentTree, item);
+						}	
+					}
+					if(child == 'firstChild' && Ext.isDefined(data.id)){
+						this.indexArray.push ({term:'ID',index: data.id.index});
+					}
+					if(child == 'lastChild' && Ext.isDefined(data.coreid)){
+						this.indexArray.push ({term: 'Core ID',index:data.coreid.index});
+					}
+					if(Ext.isDefined(data.files)){
+						if(Ext.isDefined(data.files.location)){
+							var location = (Ext.encode(data.files.location)!='{}')?data.files.location:''
+							item.extension.filename.setValue(location);
+						}
+					}
+					if(!Ext.isEmpty(this.indexArray)){
+						this.indexArray.sort(function(a, b){
+							return a.index-b.index;
+						});
+						for(var i=0; i<this.indexArray.length; i++){
+						    var index = item.extension.store.findExact('term', this.indexArray[i]['term']);
+							var rec = item.extension.store.getAt(index);
+							rec.set('rIndex', this.indexArray[i]['index']);
+							rec.commit();
+							item.extension.store.commitChanges();
+							item.extension.store.sort('rIndex', 'ASC');
+						}
+					}	
+					this.metaMakerCenterTab.metaPanel.filename.setValue(this.newMetaData);
+					this.metaMakerCenterTab.metaPanel.generateXML();
 				}
 			}, this);
-		}	
+		}
+	,	setField: function(data, currentTree, item){
+			var childTree=	currentTree.childNodes
+			for(var i=0; i < childTree.length; i++){
+				var qualName = this.getName(childTree[i].attributes.qualName);
+				var term = this.getName(data.term)
+				if(term == qualName){
+					if(!childTree[i].attributes.checked){
+						childTree[i].getUI().toggleCheck();
+						console.log(item.extension.store);
+					/*	var index = item.extension.store.findExact('term', term);
+						var rec = item.extension.store.getAt(index);
+						rec.set('rIndex', data.index);
+						rec.commit();
+						item.extension.store.commitChanges();*/
+					}
+					this.indexArray.push ({term:term,index:data.index});
+				}
+			}
+		}
 	,	activateTab: function( node ) {
 			if( this.metaMakerCenterTab.findById("extension-" + node.id) ) {			
 				this.metaMakerCenterTab.setActiveTab( "extension-" + node.id );

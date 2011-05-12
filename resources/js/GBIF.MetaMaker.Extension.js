@@ -156,7 +156,7 @@ Ext.extend(GBIF.MetaMaker.Extension, Ext.grid.EditorGridPanel, {
 		}
 
 	,	reindex: function() {
-//			console.log("reindex", this, this.store, this.store.data, this.store.data.items );
+		//	console.log("reindex", this, this.store, this.store.data, this.store.data.items );
 			var i = 0;
 			this.offset = 1;
 			this.store.data.each(function() {

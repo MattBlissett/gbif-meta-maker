@@ -132,16 +132,18 @@ GBIF.MetaMaker.MetaPanel = function(config){
 							exists: function(o){
 								return typeof o != 'undefined' && o != null && o!='';
 							}
-						,	addSlashes: function(o){		
-								if (typeof o == "boolean") {
-									return (o) ? 1 : 0;
-								}
-								
-								if (typeof o != 'undefined') {
-									o = o.replace("(none)", "");
-									return( o.replace(/\"/g, "&amp;quot;") );
-								} else {
-									return("");
+						,	addSlashes: function(o){
+								if(Ext.encode(o)!='{}'){
+									if (typeof o == "boolean") {
+										return (o) ? 1 : 0;
+									}
+									
+									if (typeof o != 'undefined') {
+										o = o.replace("(none)", "");
+										return( o.replace(/\"/g, "&amp;quot;") );
+									} else {
+										return("");
+									}
 								}
 							}
 					}
