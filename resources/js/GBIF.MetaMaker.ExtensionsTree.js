@@ -23,6 +23,7 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 								,	leaf: false
 								,	checked: true
 								,	type: 'core'
+								,	name: 'Taxon'
 								,	url: 'http://rs.gbif.org/core/dwc_taxon.xml'
 							}, {
 									text: 'Occurrences'
@@ -30,6 +31,7 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 								,	leaf: false
 								,	checked: false
 								,	type: 'core'
+								,	name: 'Occurrence'
 								,	url: 'http://rs.gbif.org/core/dwc_occurrence.xml'
 							}]
 					}, {

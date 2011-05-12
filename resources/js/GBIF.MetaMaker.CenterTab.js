@@ -11,7 +11,6 @@ GBIF.MetaMaker.CenterTab = function(config){
 		,	bodyStyle: 'font-size: 12px'
 		,	autoScroll: true
 	});
-	
 	this.coreSpecimensPanel = new GBIF.MetaMaker.ExtensionPanel({
 			id: 'core-taxon'
 		,	title: 'Taxon'

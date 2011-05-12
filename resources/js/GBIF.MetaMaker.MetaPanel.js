@@ -2,7 +2,6 @@ Ext.namespace('GBIF');
 Ext.namespace('GBIF.MetaMaker');
 
 GBIF.MetaMaker.MetaPanel = function(config){
-
 	this.metaData = {
 			core: []
 		,	extensions: []
@@ -16,7 +15,6 @@ GBIF.MetaMaker.MetaPanel = function(config){
 				,	scope: this
 			}
 	});
-
 	Ext.apply(this, config, {
 			height: 200
 		,	type: 'meta'
@@ -31,14 +29,23 @@ GBIF.MetaMaker.MetaPanel = function(config){
 					text: "Save File"
 				,	scope: this
 				,	iconCls: 'iconSave'
-				, handler: function() {
+				, 	handler: function() {
 						window.location = "resources/api/savefile.php?data=" + encodeURIComponent(this.body.dom.textContent);
+				 	}
+			},{
+					text: "Load File"
+				,	scope: this
+				,	iconCls: 'iconLoad'
+				, 	handler: function() {
+						this.loadXml = new GBIF.MetaMaker.LoadWindow();
+						this.loadXml.show();
+						this.loadXml.refBtnLoad.on('click', this.loadFile, this);
 				 	}
 			}, ' ', {
 					text: "Validate"
 				,	scope: this
 				,	iconCls: 'iconValidate'
-				, handler: function() {
+				, 	handler: function() {
 						window.open("http://tools.gbif.org/dwca-validator/validate.do?meta=" + encodeURIComponent(this.body.dom.textContent),'_blank');
 				 	}
 			}, "->", "Metadata file describing dataset:"
@@ -66,7 +73,7 @@ GBIF.MetaMaker.MetaPanel = function(config){
 				,				'</tpl>'
 
 				,				'<tpl if="term != \'ID\'">'
-				,					'\t\t&lt;field '
+				,					'\t\t&lt;field'
 				,						'<tpl if="rIndex != -1">'
 				,							' index="{rIndex}" '
 				,						'</tpl>'
@@ -100,7 +107,7 @@ GBIF.MetaMaker.MetaPanel = function(config){
 				
 
 				,				'<tpl if="term != \'Core ID\'">'
-				,					'\t\t&lt;field '
+				,					'\t\t&lt;field'
 				,						'<tpl if="rIndex != -1">'
 				,							' index="{rIndex}" '
 				,						'</tpl>'
@@ -183,5 +190,11 @@ Ext.extend(GBIF.MetaMaker.MetaPanel, Ext.Panel, {
 		
 		this.tpl.overwrite(this.body, this.metaData);
 	}
-
+,	loadFile: function(){
+			var txtValue = this.loadXml.txtLoadFile.getValue();
+			if(this.loadXml.txtLoadFile.isValid() && !Ext.isEmpty(txtValue.trim())){
+				this.currentXml = xml2json.parser(txtValue);
+				this.fireEvent('loadXML', this);
+			}
+	}
 });

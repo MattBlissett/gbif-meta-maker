@@ -142,7 +142,9 @@
 .iconSearch {
   background-image:url(../images/icons/magnifier.png) !important;
 }
-
+.iconLoad{
+	background-image:url(../images/icons/page.png) !important;
+}
 .iconBook {
   background-image:url(../images/icons/book.png) !important;
 }

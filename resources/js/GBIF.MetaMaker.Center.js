@@ -32,7 +32,7 @@ GBIF.MetaMaker.Center = function(config){
 					}					
 			}
 	}, this);
-	
+	this.metaMakerCenterTab.metaPanel.on('loadXML', this.loadXML, this);	
 	Ext.apply(this, config, {
 			layout : 'border'
 		,	defaults: {
@@ -50,9 +50,52 @@ GBIF.MetaMaker.Center = function(config){
 
 Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 	
-		loadExtension: function( node ) {
+		loadExtension: function( node ) {}
+	
+	,	loadXML: function(me){
+			var xmlTag = me.currentXml
+			if(Ext.isDefined(xmlTag.archive)){
+				this.loadTreeNode( xmlTag.archive.core);
+				if(Ext.isDefined(xmlTag.archive.extension)){
+			//		for(var i=0; i< xmlTag.archive.extension.length; i++){
+				//		this.loadTreeNode( xmlTag.archive.extension);
+			//		}
+				}
+				console.log(xmlTag);
+				me.loadXml.close();
+			}else{	
+				alert('Invalid XML');
+			}	
 		}
-
+	,	loadTreeNode: function(data){
+			var ignoreHeaderRow = (data.ignoreheaderlines == 1)? true : false;
+			var currentNode = data.rowtype.split('/');
+			var length = currentNode.length;
+			var currentNode = currentNode[length-1];
+			var treeNode = this.extensionsTree.getRootNode().firstChild.childNodes;
+			for(var i=0; i<treeNode.length; i++){
+				if((currentNode == treeNode[i].attributes.name)){
+					treeNode[i].getUI().toggleCheck();
+					var currentTree = treeNode[i];
+					this.extensionsTree.loader.on('load', function(){
+						this.setValues(data, currentTree)
+					}, this, {single: true});
+				}	
+			};
+		}
+	,	setValues: function(data, currentTree){
+			this.metaMakerCenterTab.items.each(function(item){
+				if(item.title == currentTree.text){
+					item.fileSettings.prop.setSource({
+							'File Encoding': data.encoding
+						,	'Field Delimiter': data.fieldsterminatedby
+						,	'Fields enclosed by': data.fieldsenclosedby
+						,	'Line ending': data.linesterminatedby
+						,	'Ignore header row': data.ignoreHeaderRow
+					});
+				}
+			}, this);
+		}	
 	,	activateTab: function( node ) {
 			if( this.metaMakerCenterTab.findById("extension-" + node.id) ) {			
 				this.metaMakerCenterTab.setActiveTab( "extension-" + node.id );
