@@ -5,7 +5,7 @@ GBIF.MetaMaker.CenterTab = function(config){
 
 	this.metaPanel = new GBIF.MetaMaker.MetaPanel();
 	this.aboutPanel = new Ext.Panel({
-			title: 'About'
+			title: 'Help'
 		,	autoLoad: 'resources/docs/about.html'
 		,	padding: 10
 		,	bodyStyle: 'font-size: 12px'

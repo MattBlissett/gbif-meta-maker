@@ -37,6 +37,7 @@ GBIF.MetaMaker.Center = function(config){
 			layout : 'border'
 		,	newMetaData: ''
 		,	indexArray: []
+		,	tagIndex: []
 		,	defaults: {
 				border: false
 			}
@@ -92,8 +93,11 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 					if((currentNode == identifier )){
 						treeNode[i].getUI().toggleCheck();
 						var currentTree = treeNode[i];
+						currentTree.reload();
+						console.log(currentTree);
 						this.extensionsTree.loader.on('load', function(){
 							this.indexArray = [];
+							this.tagIndex = [];
 							this.setValues(data, currentTree, child)
 						}, this );
 					}	
@@ -121,11 +125,16 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 							this.setField(data.field, currentTree, item);
 						}	
 					}
+					if(child == 'firstChild'){
+						this.metaMakerCenterTab.setActiveTab('core-'+currentTree.id);
+					}	
 					if(child == 'firstChild' && Ext.isDefined(data.id)){
 						this.indexArray.push ({term:'ID',index: data.id.index});
+						this.tagIndex.push(data.id.index);
 					}
 					if(child == 'lastChild' && Ext.isDefined(data.coreid)){
 						this.indexArray.push ({term: 'Core ID',index:data.coreid.index});
+						this.tagIndex.push(data.coreid.index);
 					}
 					if(Ext.isDefined(data.files)){
 						if(Ext.isDefined(data.files.location)){
@@ -133,14 +142,44 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 							item.extension.filename.setValue(location);
 						}
 					}
-					if(!Ext.isEmpty(this.indexArray)){
-						this.indexArray.sort(function(a, b){
-							return a.index-b.index;
+					if(!Ext.isEmpty(this.tagIndex)){
+						this.tagIndex.sort(function(a, b){
+							return a-b;
 						});
+						var missing = [];
+						var len = this.tagIndex.length;
+						var lastIndex = this.tagIndex[len-1];
+						for(var i=0; i<lastIndex; i++){
+							var found = false;
+							for(var j=0; j<len; j++){
+								if(i == this.tagIndex[j]){
+									found = true;
+									break;
+								}
+							}
+							if(!found){
+								missing.push(i);
+							}
+						}
+						if(!Ext.isEmpty(missing)){
+								for(var i=0; i< missing.length; i++){
+									item.extension.store.insert(missing[i],new Ext.data.Record({
+											term: 'Spacer' 
+										,	dataType: ''
+										,	required: false
+										,	rIndex: missing[i]
+									}));
+								}
+						}
+					}
+					if(!Ext.isEmpty(this.indexArray)){
 						for(var i=0; i<this.indexArray.length; i++){
 						    var index = item.extension.store.findExact('term', this.indexArray[i]['term']);
 							var rec = item.extension.store.getAt(index);
 							rec.set('rIndex', this.indexArray[i]['index']);
+							rec.set('vocabulary', this.indexArray[i]['vocabulary']);
+							rec.set('global', this.indexArray[i]['global']);
+							rec.set('static', this.indexArray[i]['default_']);
 							rec.commit();
 							item.extension.store.commitChanges();
 							item.extension.store.sort('rIndex', 'ASC');
@@ -159,14 +198,26 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 				if(term == qualName){
 					if(!childTree[i].attributes.checked){
 						childTree[i].getUI().toggleCheck();
-						console.log(item.extension.store);
-					/*	var index = item.extension.store.findExact('term', term);
-						var rec = item.extension.store.getAt(index);
-						rec.set('rIndex', data.index);
-						rec.commit();
-						item.extension.store.commitChanges();*/
 					}
-					this.indexArray.push ({term:term,index:data.index});
+					var vocabulary = ((Ext.isDefined(data.vocabulary)) && (Ext.encode(data.vocabulary) != '{}')) ? data.vocabulary : '';
+					var indexing = ((Ext.isDefined(data.index)) && (Ext.encode(data.index) != '{}')) ? data.index : i;
+					if((Ext.isDefined(data.global)) && (Ext.encode(data.global) != '{}')){
+						if( data.global || data.global == "true"){
+							var global = true;
+						}else{
+							var global = false;
+						}
+					}
+					var default_ = ((Ext.isDefined(data.default_)) && (Ext.encode(data.default_) != '{}')) ? data.default_ : '';
+					tempRec = {	
+							term: term
+						,	index: indexing
+						, 	vocabulary: vocabulary
+						,	global: global
+						,	default_: default_
+					}
+					this.indexArray.push(tempRec);
+					this.tagIndex.push(indexing);
 				}
 			}
 		}

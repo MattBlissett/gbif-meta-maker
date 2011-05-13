@@ -16,12 +16,21 @@ GBIF.MetaMaker.Properties = function(config){
 		,	emptyText:'-- Select encoding--'
 		,	selectOnFocus: true
  });
-
+ var terminatedByStore = new Ext.data.ArrayStore({
+		fields: ['value','platfrom']
+	,	data: [
+				['\\r\\n' ,'Windows (\\r\\n)']
+			,	['\\n','UNIX(Linux, Mac OS X) (\\n)']
+			,	['\\r','Classic Mac OS (\\r)']
+		]
+ })
  var comboTerminatedBy = new Ext.form.ComboBox({
 			fieldLabel: 'comboTerminatedBy'
 		,	name: 'comboTerminatedBy'
 		,	allowBlank: false
-		,	store: ['\\r\\n', '\\n', '\\r']
+		,	displayField: 'platfrom'
+		,	valueField: 'value'
+		,	store: terminatedByStore //['\\r\\n', '\\n', '\\r']
 		,	typeAhead: true
 		,	mode: 'local'
 		,	triggerAction: 'all'

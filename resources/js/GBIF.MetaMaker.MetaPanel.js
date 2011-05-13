@@ -194,8 +194,26 @@ Ext.extend(GBIF.MetaMaker.MetaPanel, Ext.Panel, {
 	}
 ,	loadFile: function(){
 			var txtValue = this.loadXml.txtLoadFile.getValue();
-			if(this.loadXml.txtLoadFile.isValid() && !Ext.isEmpty(txtValue.trim())){
-				this.currentXml = xml2json.parser(txtValue);
+			var reg = new RegExp("\\s{2,}", "g");
+			txtValue = txtValue.replace(reg, " ");
+			txtValue1 = txtValue.replace(/\"/g, "&amp;quot;");
+			if(this.loadXml.txtLoadFile.isValid() && !Ext.isEmpty(txtValue1.trim())){
+				parser = new DOMParser();
+				xmlDoc = parser.parseFromString(txtValue1,"text/xml");
+				var fieldArray = xmlDoc.getElementsByTagName('field');
+				if(!Ext.isEmpty(fieldArray)){
+					for(var i=0; i<fieldArray.length; i++){
+						attr = fieldArray[i].attributes.getNamedItem('default');
+						if(attr != null){
+							var default_ = xmlDoc.createAttribute('default_');
+							default_.nodeValue = attr.nodeValue;
+							fieldArray[i].attributes.setNamedItem(default_);
+							fieldArray[i].attributes.removeNamedItem('default')		
+						}
+					}
+				}
+				var newXMl = (new XMLSerializer()).serializeToString(xmlDoc)
+				this.currentXml = xml2json.parser(newXMl);
 				this.fireEvent('loadXML', this);
 			}
 	}
