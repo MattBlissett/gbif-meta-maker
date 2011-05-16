@@ -2,14 +2,27 @@ Ext.namespace('GBIF');
 Ext.namespace('GBIF.MetaMaker');
 
 GBIF.MetaMaker.Center = function(config){
-
 	this.metaMakerCenterTab = new GBIF.MetaMaker.CenterTab({region: 'center'});
+	this.oldXML = '';
+	this.itemsArray = [];
 	this.extensionsTree = new GBIF.MetaMaker.ExtensionsTree({
 			region: 'west'
 		,	width: 250
 		,	minWidth: 250
 		,	maxWidth: 250
 		,	split: true
+		,	tbar: [
+				'->',{
+					text: 'Reset Project'
+				,	scope: this
+				, 	handler: function() {
+						Ext.Msg.confirm("Confirm", "Are you sure reset project ?", function(btn){
+							if(btn == 'yes'){
+								this.resetXML();	
+							}
+						}, this)
+				 	}	
+				}]
 		,	listeners: {
 					dblclick: this.loadExtension		
 				,	checkchange: this.checkchange
@@ -32,7 +45,8 @@ GBIF.MetaMaker.Center = function(config){
 					}					
 			}
 	}, this);
-	this.metaMakerCenterTab.metaPanel.on('loadXML', this.loadXML, this);	
+
+	this.metaMakerCenterTab.metaPanel.on('loadXML', this.loadXML, this);
 	Ext.apply(this, config, {
 			layout : 'border'
 		,	newMetaData: ''
@@ -54,9 +68,79 @@ GBIF.MetaMaker.Center = function(config){
 Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 	
 		loadExtension: function( node ) {}
-	
+	,	resetXML: function(){
+			if(!Ext.isEmpty(this.oldXML)){
+				var me = this.metaMakerCenterTab.metaPanel;
+				var oldxml = '<?xml version="1.0"?> <archive xmlns="http://rs.tdwg.org/dwc/text/"> <core encoding="UTF-8" linesTerminatedBy="\r\n" fieldsTerminatedBy="," fieldsEnclosedBy="&quot;" ignoreHeaderLines="1" rowType="http://rs.tdwg.org/dwc/terms/Taxon"> <files> <location></location> </files> <id index="0"/> </core> </archive>'
+				var xmlTag = xml2json.parser(oldxml);//this.oldXML);
+				if(Ext.isDefined(xmlTag.archive)){
+					if(Ext.isDefined(xmlTag.archive.core)){
+						this.resetCheck(xmlTag.archive.core);
+					}
+					var treeNode = this.extensionsTree.getRootNode().lastChild.childNodes;
+					for(var i=0; i<treeNode.length; i++){
+						if(treeNode[i].attributes.checked){
+							treeNode[i].getUI().checkbox.checked = false;
+							childTree = treeNode[i].childNodes;
+							for(var j=0; j<childTree.length; j++){
+								if(childTree[j].attributes.checked){
+									childTree[j].getUI().toggleCheck();	
+								}	
+							}
+							this.metaMakerCenterTab.items.each(function(item){
+								if(item.title == treeNode[i].attributes.title){
+									item.extension.store.each(function(){
+										var index = item.extension.store.find("term", 'Spacer');
+										if (index >= 0 ) {
+											item.extension.store.remove( item.extension.store.getAt( index ) );
+										}
+									});
+								}
+							},this);
+							this.metaMakerCenterTab.hideTabStripItem("extension-" + treeNode[i].id);
+							this.metaMakerCenterTab.getComponent("extension-" + treeNode[i].id).skip = true;
+							if (this.metaMakerCenterTab.getActiveTab().id == "meta") {
+								this.metaMakerCenterTab.checkTab( this.metaMakerCenterTab, this.metaMakerCenterTab.getComponent("meta") );
+							} else {
+								this.metaMakerCenterTab.setActiveTab("meta");
+							}
+						}
+					}
+				}else {	
+					alert('Error in reset XML');
+				}
+			}
+		}
+	,	resetCheck: function(data){
+			var currentNode = this.getName(data.rowtype);
+			var treeNode = this.extensionsTree.getRootNode().firstChild.childNodes;
+			for(var i=0; i<treeNode.length; i++){
+				var identifier = this.getName(treeNode[i].attributes.identifier);
+				if(currentNode == identifier){
+					treeNode[i].getUI().toggleCheck();
+					childTree = treeNode[i].childNodes;
+					for(var j=0; j<childTree.length; j++){
+						if(childTree[j].attributes.checked){
+							childTree[j].getUI().toggleCheck();
+						}	
+					}
+					this.metaMakerCenterTab.items.each(function(item){
+						if(item.title == treeNode[i].attributes.title){
+							item.extension.store.each(function(){
+								var index = item.extension.store.find("term", 'Spacer');
+								if (index >= 0 ) {
+									item.extension.store.remove( item.extension.store.getAt( index ) );
+								}
+							});
+							this.metaMakerCenterTab.metaPanel.filename.setValue('');	
+						}
+					},this);
+				}
+			}
+		}	
 	,	loadXML: function(me){
 			var xmlTag = me.currentXml
+			this.oldXML = me.body.dom.textContent;
 			if(Ext.isDefined(xmlTag.archive)){
 				this.newMetaData = Ext.isDefined(xmlTag.archive.metadata)? xmlTag.archive.metadata: '';
 				this.loadTreeNode( xmlTag.archive.core, 'firstChild');
@@ -91,13 +175,10 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 				for(var i=0; i<treeNode.length; i++){
 					var identifier = this.getName(treeNode[i].attributes.identifier);
 					if((currentNode == identifier )){
-						treeNode[i].getUI().toggleCheck();
+						treeNode[i].getUI().toggleCheck();			
 						var currentTree = treeNode[i];
 						currentTree.reload();
-						console.log(currentTree);
 						this.extensionsTree.loader.on('load', function(){
-							this.indexArray = [];
-							this.tagIndex = [];
 							this.setValues(data, currentTree, child)
 						}, this );
 					}	
@@ -106,16 +187,58 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 		}
 	,	setValues: function(data, currentTree, child){
 			var ignoreHeaderRow = (data.ignoreheaderlines == 1)? true : false;
-			var linesterminatedby = (Ext.encode(data.linesterminatedby)=='{}')? data.linesterminatedby : '';
+			var linesterminatedby = (Ext.encode(data.linesterminatedby)!='{}')? data.linesterminatedby : '';
+			var fieldsterminatedby = '';
+			var encoding = data.encoding;
+			var fieldsenclosedby = '';
+			switch(data.fieldsenclosedby){
+				case '&amp;quot;':
+					fieldsenclosedby = '"';
+					break;
+				case '&quot;':
+					fieldsenclosedby = '"';
+					break;
+				case '&amp;#39;':
+					fieldsenclosedby = "'";
+					break;	
+				default:
+					fieldsenclosedby = (Ext.encode(data.fieldsenclosedby)!='{}')? data.fieldsenclosedby : '(none)';
+					break;
+			}
+			switch(data.fieldsterminatedby){
+				case '&amp;#44;':
+					fieldsterminatedby = ',';
+					break;
+				case '\t':
+					fieldsterminatedby = '\t';
+					break;
+				case '&amp;#59;':
+					fieldsterminatedby = ';';
+					break;
+				case '&amp;#124;':
+					fieldsterminatedby = '|';
+					break;
+				case '&amp;#93;':
+					fieldsterminatedby = ']';
+					break;
+				default:
+					fieldsterminatedby = (Ext.encode(data.fieldsterminatedby)!='{}')? data.fieldsterminatedby : '(none)'
+					break;
+			}
 			this.metaMakerCenterTab.items.each(function(item){
 				if(item.title == currentTree.attributes.title){
+					if(child == 'firstChild'){
+						this.metaMakerCenterTab.setActiveTab('core-'+currentTree.id);
+					}
 					item.fileSettings.prop.setSource({
-							'File Encoding': data.encoding
-						,	'Field Delimiter': data.fieldsterminatedby
-						,	'Fields enclosed by': data.fieldsenclosedby
+							'File Encoding': encoding
+						,	'Field Delimiter': fieldsterminatedby
+						,	'Fields enclosed by': fieldsenclosedby
 						,	'Line ending': linesterminatedby
 						,	'Ignore header row': ignoreHeaderRow
 					});
+					this.indexArray = [];
+					this.tagIndex = [];
 					if(Ext.isDefined(data.field)){
 						if(Ext.isDefined(data.field.length)){
 							for(var i=0; i< data.field.length; i++){
@@ -124,9 +247,6 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 						}else{
 							this.setField(data.field, currentTree, item);
 						}	
-					}
-					if(child == 'firstChild'){
-						this.metaMakerCenterTab.setActiveTab('core-'+currentTree.id);
 					}	
 					if(child == 'firstChild' && Ext.isDefined(data.id)){
 						this.indexArray.push ({term:'ID',index: data.id.index});
@@ -142,11 +262,11 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 							item.extension.filename.setValue(location);
 						}
 					}
+					var missing = [];
 					if(!Ext.isEmpty(this.tagIndex)){
 						this.tagIndex.sort(function(a, b){
 							return a-b;
 						});
-						var missing = [];
 						var len = this.tagIndex.length;
 						var lastIndex = this.tagIndex[len-1];
 						for(var i=0; i<lastIndex; i++){
@@ -161,16 +281,6 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 								missing.push(i);
 							}
 						}
-						if(!Ext.isEmpty(missing)){
-								for(var i=0; i< missing.length; i++){
-									item.extension.store.insert(missing[i],new Ext.data.Record({
-											term: 'Spacer' 
-										,	dataType: ''
-										,	required: false
-										,	rIndex: missing[i]
-									}));
-								}
-						}
 					}
 					if(!Ext.isEmpty(this.indexArray)){
 						for(var i=0; i<this.indexArray.length; i++){
@@ -182,9 +292,25 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 							rec.set('static', this.indexArray[i]['default_']);
 							rec.commit();
 							item.extension.store.commitChanges();
-							item.extension.store.sort('rIndex', 'ASC');
 						}
-					}	
+					}
+					if(!Ext.isEmpty(missing)){
+							item.extension.store.each(function(){
+								var index = item.extension.store.find("term", 'Spacer');
+								if (index >= 0 ) {
+									item.extension.store.remove( item.extension.store.getAt( index ) );
+								}
+							});
+							for(var i=0; i< missing.length; i++){
+								item.extension.store.insert(missing[i], new Ext.data.Record({
+											term: 'Spacer' 
+										,	dataType: ''
+										,	required: false
+										,	rIndex: missing[i]
+								}));
+							}
+					}
+					item.extension.store.sort('rIndex', 'ASC');
 					this.metaMakerCenterTab.metaPanel.filename.setValue(this.newMetaData);
 					this.metaMakerCenterTab.metaPanel.generateXML();
 				}
@@ -197,7 +323,7 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 				var term = this.getName(data.term)
 				if(term == qualName){
 					if(!childTree[i].attributes.checked){
-						childTree[i].getUI().toggleCheck();
+						childTree[i].getUI().toggleCheck();			
 					}
 					var vocabulary = ((Ext.isDefined(data.vocabulary)) && (Ext.encode(data.vocabulary) != '{}')) ? data.vocabulary : '';
 					var indexing = ((Ext.isDefined(data.index)) && (Ext.encode(data.index) != '{}')) ? data.index : i;

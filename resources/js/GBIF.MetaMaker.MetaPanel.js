@@ -196,10 +196,15 @@ Ext.extend(GBIF.MetaMaker.MetaPanel, Ext.Panel, {
 			var txtValue = this.loadXml.txtLoadFile.getValue();
 			var reg = new RegExp("\\s{2,}", "g");
 			txtValue = txtValue.replace(reg, " ");
-			txtValue1 = txtValue.replace(/\"/g, "&amp;quot;");
-			if(this.loadXml.txtLoadFile.isValid() && !Ext.isEmpty(txtValue1.trim())){
+			txtValue = txtValue.replace(/\"""/g, "\"&amp;quot;\"");
+			txtValue = txtValue.replace(/\"'"/g, "\"&amp;#39;\"");
+			txtValue = txtValue.replace(/\","/g, "\"&amp;#44;\"");
+			txtValue = txtValue.replace(/\";"/g, "\"&amp;#59;\"");
+			txtValue = txtValue.replace(/\|/g, "&amp;#124;");
+			txtValue = txtValue.replace(/\"]"/g, "\"&amp;#93;\"");
+			if(this.loadXml.txtLoadFile.isValid() && !Ext.isEmpty(txtValue.trim())){
 				parser = new DOMParser();
-				xmlDoc = parser.parseFromString(txtValue1,"text/xml");
+				xmlDoc = parser.parseFromString(txtValue,"text/xml");
 				var fieldArray = xmlDoc.getElementsByTagName('field');
 				if(!Ext.isEmpty(fieldArray)){
 					for(var i=0; i<fieldArray.length; i++){
