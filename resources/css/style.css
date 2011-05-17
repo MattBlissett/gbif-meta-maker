@@ -138,7 +138,9 @@
 .iconAbout {
   background-image:url(../images/icons/information.png) !important;
 }
-
+.iconReset{
+	background-image:url(../images/icons/refresh.gif) !important;
+}
 .iconSearch {
   background-image:url(../images/icons/magnifier.png) !important;
 }

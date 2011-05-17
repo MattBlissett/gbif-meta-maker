@@ -13,8 +13,9 @@ GBIF.MetaMaker.Center = function(config){
 		,	split: true
 		,	tbar: [
 				'->',{
-					text: 'Reset Project'
+					text: 'Reset Assistant'
 				,	scope: this
+				,	iconCls: 'iconReset'
 				, 	handler: function() {
 						Ext.Msg.confirm("Confirm", "Are you sure reset project ?", function(btn){
 							if(btn == 'yes'){
@@ -69,10 +70,9 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 	
 		loadExtension: function( node ) {}
 	,	resetXML: function(){
-			if(!Ext.isEmpty(this.oldXML)){
 				var me = this.metaMakerCenterTab.metaPanel;
 				var oldxml = '<?xml version="1.0"?> <archive xmlns="http://rs.tdwg.org/dwc/text/"> <core encoding="UTF-8" linesTerminatedBy="\r\n" fieldsTerminatedBy="," fieldsEnclosedBy="&quot;" ignoreHeaderLines="1" rowType="http://rs.tdwg.org/dwc/terms/Taxon"> <files> <location></location> </files> <id index="0"/> </core> </archive>'
-				var xmlTag = xml2json.parser(oldxml);//this.oldXML);
+				var xmlTag = xml2json.parser(oldxml);
 				if(Ext.isDefined(xmlTag.archive)){
 					if(Ext.isDefined(xmlTag.archive.core)){
 						this.resetCheck(xmlTag.archive.core);
@@ -104,12 +104,12 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 							} else {
 								this.metaMakerCenterTab.setActiveTab("meta");
 							}
+							treeNode[i].collapse();
 						}
 					}
 				}else {	
 					alert('Error in reset XML');
 				}
-			}
 		}
 	,	resetCheck: function(data){
 			var currentNode = this.getName(data.rowtype);
@@ -132,9 +132,20 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 									item.extension.store.remove( item.extension.store.getAt( index ) );
 								}
 							});
-							this.metaMakerCenterTab.metaPanel.filename.setValue('');	
+							item.fileSettings.prop.setSource({
+									'File Encoding': 'UTF-8'
+								,	'Field Delimiter': ','
+								,	'Fields enclosed by': '\"'
+								,	'Line ending': '\\r\\n'
+								,	'Ignore header row': true
+							});
+							item.fileSettings.form.setValues({format:'csv'});
+							item.extension.filename.setValue('');				
 						}
 					},this);
+					this.metaMakerCenterTab.setActiveTab('core-taxon');
+					this.metaMakerCenterTab.metaPanel.filename.setValue('');
+					treeNode[i].collapse();
 				}
 			}
 		}	
@@ -153,7 +164,6 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 						this.loadTreeNode( xmlTag.archive.extension, 'lastChild');
 					}	
 				}
-				console.log(xmlTag);
 				me.loadXml.close();
 			}else{	
 				alert('Invalid XML');
@@ -185,27 +195,9 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 				}
 			}	
 		}
-	,	setValues: function(data, currentTree, child){
-			var ignoreHeaderRow = (data.ignoreheaderlines == 1)? true : false;
-			var linesterminatedby = (Ext.encode(data.linesterminatedby)!='{}')? data.linesterminatedby : '';
+	,	getFieldsterminate: function(data){
 			var fieldsterminatedby = '';
-			var encoding = data.encoding;
-			var fieldsenclosedby = '';
-			switch(data.fieldsenclosedby){
-				case '&amp;quot;':
-					fieldsenclosedby = '"';
-					break;
-				case '&quot;':
-					fieldsenclosedby = '"';
-					break;
-				case '&amp;#39;':
-					fieldsenclosedby = "'";
-					break;	
-				default:
-					fieldsenclosedby = (Ext.encode(data.fieldsenclosedby)!='{}')? data.fieldsenclosedby : '(none)';
-					break;
-			}
-			switch(data.fieldsterminatedby){
+			switch(data){
 				case '&amp;#44;':
 					fieldsterminatedby = ',';
 					break;
@@ -222,9 +214,35 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 					fieldsterminatedby = ']';
 					break;
 				default:
-					fieldsterminatedby = (Ext.encode(data.fieldsterminatedby)!='{}')? data.fieldsterminatedby : '(none)'
+					fieldsterminatedby = (Ext.encode(data)!='{}')? data : '(none)'
 					break;
 			}
+			return fieldsterminatedby;
+		}
+	,	getFieldsenclosed: function(data){
+			var fieldsenclosedby = '';
+			switch(data){
+				case '&amp;quot;':
+					fieldsenclosedby = '"';
+					break;
+				case '&quot;':
+					fieldsenclosedby = '"';
+					break;
+				case '&amp;#39;':
+					fieldsenclosedby = "'";
+					break;	
+				default:
+					fieldsenclosedby = (Ext.encode(data)!='{}')? data : '(none)';
+					break;
+			}
+			return fieldsenclosedby;
+		}
+	,	setValues: function(data, currentTree, child){
+			var ignoreHeaderRow = (data.ignoreheaderlines == 1)? true : false;
+			var linesterminatedby = (Ext.encode(data.linesterminatedby)!='{}')? data.linesterminatedby : '';
+			var encoding = data.encoding;
+			var fieldsenclosedby = this.getFieldsenclosed(data.fieldsenclosedby);
+			var fieldsterminatedby = this.getFieldsterminate(data.fieldsterminatedby);
 			this.metaMakerCenterTab.items.each(function(item){
 				if(item.title == currentTree.attributes.title){
 					if(child == 'firstChild'){
@@ -354,12 +372,10 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 		}
 
 	,	checkDisabled: function(node) {
-//			console.log(this, node);
 			return(!node.disabled);
 		}
 
 	,	checkchange: function( node, state ) {
-//			console.log(node, state);
 			switch( node.attributes.type ) {
 				case 'core':
 					if (state == false) {
@@ -445,15 +461,15 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 
 					if (state) {
 						tmpTab.extension.store.loadData([[
-								node.attributes.term
-							, node.attributes.dataType
-							, node.attributes.required							
-							, node.attributes.static							
-							, node.attributes.description							
-							, node.attributes.qualName					
-							, node.attributes.namespace
-							, node.attributes.relation
-						]], true );
+									node.attributes.term
+								, node.attributes.dataType
+								, node.attributes.required							
+								, node.attributes.static							
+								, node.attributes.description							
+								, node.attributes.qualName					
+								, node.attributes.namespace
+								, node.attributes.relation
+							]], true );	
 					} else {
 						var index = tmpTab.extension.store.find("term", node.attributes.term);
 						if (index >= 0 ) {

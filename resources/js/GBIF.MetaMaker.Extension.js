@@ -147,7 +147,6 @@ Ext.extend(GBIF.MetaMaker.Extension, Ext.grid.EditorGridPanel, {
 		}
 
 	,	renderIndex: function(value, e, record, index) {
-//console.log("update view", record.data.rIndex, value, e, record, index );
 			if (record.data.rIndex != -1) {			
 				return(record.data.rIndex);
 			} else {
@@ -156,7 +155,6 @@ Ext.extend(GBIF.MetaMaker.Extension, Ext.grid.EditorGridPanel, {
 		}
 
 	,	reindex: function() {
-		//	console.log("reindex", this, this.store, this.store.data, this.store.data.items );
 			var i = 0;
 			this.offset = 1;
 			this.store.data.each(function() {
