@@ -5,9 +5,9 @@ GBIF.MetaMaker.ExtensionPanel = function(config){
 
 	this.fileSettings = new GBIF.MetaMaker.FileSettings({
 			region: 'east'
-		,	width: 250
-		,	minWidth: 250
-		,	maxWidth: 250
+		,	width: 270
+		,	minWidth: 270
+		,	maxWidth: 270
 		,	split: true
 	}, this);
 
