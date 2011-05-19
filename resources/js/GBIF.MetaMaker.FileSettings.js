@@ -30,17 +30,17 @@ GBIF.MetaMaker.FileSettings = function(config){
 					}, {
 							fieldLabel: ''
 						,	itemId: 'radio-tab'
-						, labelSeparator: ''
-						, boxLabel: 'Tab Separated File'
-						, name: 'format'
-						, inputValue: 'tab'
+						, 	labelSeparator: ''
+						, 	boxLabel: 'Tab Separated File'
+						, 	name: 'format'
+						, 	inputValue: 'tab'
 					}, {
 							fieldLabel: ''
 						,	itemId: 'radio-custom'
-						, labelSeparator: ''
-						, boxLabel: 'Custom Format'
-						, name: 'format'
-						, inputValue: 'custom'
+						, 	labelSeparator: ''
+						, 	boxLabel: 'Custom Format'
+						, 	name: 'format'
+						, 	inputValue: 'custom'
 					}]
 				,	listeners: {
 							change: this.changeProp

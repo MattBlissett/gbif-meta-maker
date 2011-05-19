@@ -68,22 +68,22 @@ GBIF.MetaMaker.MetaPanel = function(config){
 				,			'<tpl if="xindex &gt; 0">'
 				,				'<tpl if="term != \'Spacer\'">'
 
-				,				'<tpl if="term == \'ID\'">'
+				,				'<tpl if="term == \'ID\' && rIndex != 0">'
 				,					'\t\t&lt;id index="{rIndex}"/&gt;\r\n'
 				,				'</tpl>'
 
 				,				'<tpl if="term != \'ID\'">'
 				,					'\t\t&lt;field'
-				,						'<tpl if="rIndex != -1">'
-				,							' index="{rIndex}" '
+				,						'<tpl if="rIndex != -1 && rIndex != 0">'
+				,							' index="{rIndex}"'
 				,						'</tpl>'
 				,						'<tpl if="rIndex == -1 || static != \'\'">'
-				,							' default="{static}" '
+				,							' default="{static}"'
 				,						'</tpl>'
 				,						'<tpl if="vocabulary != \'\'">'
-				,							' vocabulary="{vocabulary}" '
+				,							' vocabulary="{vocabulary}"'
 				,						'</tpl>'
-				,					'term="{qualName}"/&gt;\r\n'
+				,					' term="{qualName}"/&gt;\r\n'
 				,				'</tpl>'
 				
 				,				'</tpl>'
@@ -101,23 +101,23 @@ GBIF.MetaMaker.MetaPanel = function(config){
 				,		'<tpl for="fields">'
 				,			'<tpl if="term != \'Spacer\'">'
 
-				,				'<tpl if="term == \'Core ID\'">'
+				,				'<tpl if="term == \'Core ID\' && rIndex != 0 ">'
 				,					'\t\t&lt;coreid index="{rIndex}"/&gt;\r\n'
 				,				'</tpl>'
 				
 
 				,				'<tpl if="term != \'Core ID\'">'
 				,					'\t\t&lt;field'
-				,						'<tpl if="rIndex != -1">'
-				,							' index="{rIndex}" '
+				,						'<tpl if="rIndex != -1 && rIndex != 0 ">'
+				,							' index="{rIndex}"'
 				,						'</tpl>'
 				,						'<tpl if="rIndex == -1 || static != \'\'">'
-				,							' default="{static}" '
+				,							' default="{static}"'
 				,						'</tpl>'
 				,						'<tpl if="vocabulary != \'\'">'
-				,							' vocabulary="{vocabulary}" '
+				,							' vocabulary="{vocabulary}"'
 				,						'</tpl>'
-				,					'term="{qualName}"/&gt;\r\n'
+				,					' term="{qualName}"/&gt;\r\n'
 				,				'</tpl>'
 				
 				,			'</tpl>'
@@ -196,12 +196,14 @@ Ext.extend(GBIF.MetaMaker.MetaPanel, Ext.Panel, {
 			var txtValue = this.loadXml.txtLoadFile.getValue();
 			var reg = new RegExp("\\s{2,}", "g");
 			txtValue = txtValue.replace(reg, " ");
+			txtValue = txtValue.replace(/\&/g, "&amp;");
 			txtValue = txtValue.replace(/\"""/g, "\"&amp;quot;\"");
 			txtValue = txtValue.replace(/\"'"/g, "\"&amp;#39;\"");
 			txtValue = txtValue.replace(/\","/g, "\"&amp;#44;\"");
 			txtValue = txtValue.replace(/\";"/g, "\"&amp;#59;\"");
 			txtValue = txtValue.replace(/\|/g, "&amp;#124;");
 			txtValue = txtValue.replace(/\"]"/g, "\"&amp;#93;\"");
+			txtValue = txtValue.replace(/\\t/g, "\\tabSpace");
 			if(this.loadXml.txtLoadFile.isValid() && !Ext.isEmpty(txtValue.trim())){
 				parser = new DOMParser();
 				xmlDoc = parser.parseFromString(txtValue,"text/xml");
