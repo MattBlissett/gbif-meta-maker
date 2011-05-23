@@ -7,10 +7,12 @@ GBIF.MetaMaker.LoadWindow = function(config){
 		,	title: 'Load File'
 		,	modal: true
 		,	resizable: false
+/*		
 		,	defaults: {
 					padding: 5
 				,	border: false
 			}
+*/			
 		,	plain: true
 		,	closable: true
 		,	currentXml: ''

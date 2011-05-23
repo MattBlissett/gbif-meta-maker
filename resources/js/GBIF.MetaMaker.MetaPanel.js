@@ -29,17 +29,17 @@ GBIF.MetaMaker.MetaPanel = function(config){
 					text: "Save File"
 				,	scope: this
 				,	iconCls: 'iconSave'
-				, 	handler: function() {
+				, handler: function() {
 						window.location = "resources/api/savefile.php?data=" + encodeURIComponent(this.body.dom.textContent);
 				 	}
 			},{
 					text: "Load File"
 				,	scope: this
 				,	iconCls: 'iconLoad'
-				, 	handler: function() {
+				, handler: function() {
 						this.loadXml = new GBIF.MetaMaker.LoadWindow();
 						this.loadXml.show();
-						this.loadXml.refBtnLoad.on('click', this.loadFile, this);
+						this.loadXml.refBtnLoad.on('click', this.loadFile, this);						
 				 	}
 			}, ' ', {
 					text: "Validate"
@@ -101,14 +101,14 @@ GBIF.MetaMaker.MetaPanel = function(config){
 				,		'<tpl for="fields">'
 				,			'<tpl if="term != \'Spacer\'">'
 
-				,				'<tpl if="term == \'Core ID\' && rIndex != 0 ">'
+				,				'<tpl if="term == \'Core ID\'">'
 				,					'\t\t&lt;coreid index="{rIndex}"/&gt;\r\n'
 				,				'</tpl>'
 				
 
 				,				'<tpl if="term != \'Core ID\'">'
 				,					'\t\t&lt;field'
-				,						'<tpl if="rIndex != -1 && rIndex != 0 ">'
+				,						'<tpl if="rIndex != -1">'
 				,							' index="{rIndex}"'
 				,						'</tpl>'
 				,						'<tpl if="rIndex == -1 || static != \'\'">'
@@ -155,56 +155,57 @@ GBIF.MetaMaker.MetaPanel = function(config){
 }	
 
 Ext.extend(GBIF.MetaMaker.MetaPanel, Ext.Panel, {
-
-	generateXML: function() {
-		this.metaData.metadata = this.filename.getValue();
-		
-		Ext.each(this.metaData.extensions, function(extension) {
-			var pos = -1;
-			var idRec = null;
-			Ext.each(extension.fields, function(field, index) {
-				if (field.term == "Core ID") {
-					pos = index;
-					idRec = field;
+	
+		generateXML: function() {
+			this.metaData.metadata = this.filename.getValue();
+			
+			Ext.each(this.metaData.extensions, function(extension) {
+				var pos = -1;
+				var idRec = null;
+				Ext.each(extension.fields, function(field, index) {
+					if (field.term == "Core ID") {
+						pos = index;
+						idRec = field;
+					}
+				});
+				if (pos != -1) {
+					extension.fields.splice(pos, 1);
+					extension.fields.unshift(idRec);
 				}
 			});
-			if (pos != -1) {
-				extension.fields.splice(pos, 1);
-				extension.fields.unshift(idRec);
-			}
-		});
-
-		Ext.each(this.metaData.core, function(extension) {
-			var pos = -1;
-			var idRec = null;
-			Ext.each(extension.fields, function(field, index) {
-
-				if (field.term == "ID") {
-					pos = index;
-					idRec = field;
+	
+			Ext.each(this.metaData.core, function(extension) {
+				var pos = -1;
+				var idRec = null;
+				Ext.each(extension.fields, function(field, index) {
+	
+					if (field.term == "ID") {
+						pos = index;
+						idRec = field;
+					}
+				});
+				if (pos != -1) {
+					extension.fields.splice(pos, 1);
+					extension.fields.unshift(idRec);
 				}
 			});
-			if (pos != -1) {
-				extension.fields.splice(pos, 1);
-				extension.fields.unshift(idRec);
-			}
-		});
-		
-		this.tpl.overwrite(this.body, this.metaData);
-	}
-,	loadFile: function(){
-			var txtValue = this.loadXml.txtLoadFile.getValue();
-			var reg = new RegExp("\\s{2,}", "g");
-			txtValue = txtValue.replace(reg, " ");
-			txtValue = txtValue.replace(/\&/g, "&amp;");
-			txtValue = txtValue.replace(/\"""/g, "\"&amp;quot;\"");
-			txtValue = txtValue.replace(/\"'"/g, "\"&amp;#39;\"");
-			txtValue = txtValue.replace(/\","/g, "\"&amp;#44;\"");
-			txtValue = txtValue.replace(/\";"/g, "\"&amp;#59;\"");
-			txtValue = txtValue.replace(/\|/g, "&amp;#124;");
-			txtValue = txtValue.replace(/\"]"/g, "\"&amp;#93;\"");
-			txtValue = txtValue.replace(/\\t/g, "\\tabSpace");
-			if(this.loadXml.txtLoadFile.isValid() && !Ext.isEmpty(txtValue.trim())){
+			
+			this.tpl.overwrite(this.body, this.metaData);
+		}
+	
+	,	loadFile: function(){
+			if(this.loadXml.txtLoadFile.isValid()){
+				var txtValue = this.loadXml.txtLoadFile.getValue();
+				var reg = new RegExp("\\s{2,}", "g");
+				txtValue = txtValue.replace(reg, " ");
+				txtValue = txtValue.replace(/\&/g, "&amp;");
+				txtValue = txtValue.replace(/\"""/g, "\"&amp;quot;\"");
+				txtValue = txtValue.replace(/\"'"/g, "\"&amp;#39;\"");
+				txtValue = txtValue.replace(/\","/g, "\"&amp;#44;\"");
+				txtValue = txtValue.replace(/\";"/g, "\"&amp;#59;\"");
+				txtValue = txtValue.replace(/\|/g, "&amp;#124;");
+				txtValue = txtValue.replace(/\"]"/g, "\"&amp;#93;\"");
+				txtValue = txtValue.replace(/\\t/g, "\\tabSpace");
 				parser = new DOMParser();
 				xmlDoc = parser.parseFromString(txtValue,"text/xml");
 				var fieldArray = xmlDoc.getElementsByTagName('field');
@@ -219,9 +220,10 @@ Ext.extend(GBIF.MetaMaker.MetaPanel, Ext.Panel, {
 						}
 					}
 				}
-				var newXMl = (new XMLSerializer()).serializeToString(xmlDoc)
-				this.currentXml = xml2json.parser(newXMl);
-				this.fireEvent('loadXML', this);
+				var newXMl = (new XMLSerializer()).serializeToString(xmlDoc);
+				this.fireEvent('loadXML', xml2json.parser(newXMl));
+				this.loadXml.close();
 			}
-	}
+		}
+
 });
