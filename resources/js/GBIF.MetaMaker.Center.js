@@ -179,14 +179,23 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 	,	loadXML: function(data) {
 			this.resetAssistant(); // Clears the form.
 			if (data.archive.metadata) this.metaMakerCenterTab.metaPanel.filename.setValue(data.archive.metadata);
+//console.log(data.archive);			
 			Ext.each(data.archive.extension, function(e) {
 				var n = this.extensionsTree.getRootNode().findChild("identifier", e.rowtype, true);
-				n.collapse();
 				if (!Ext.isEmpty(n)) {
+					n.collapse();
 					n.on('expand', this.loadExtension.createDelegate(this, ["extension", n, e]), this, {single: true, delay: 500});
 					this.checkchange(n, true);
 				}
 			}, this);
+			
+			// Core						
+			var n = this.extensionsTree.getRootNode().findChild("identifier", data.archive.core.rowtype, true);
+			if (!Ext.isEmpty(n)) {
+				n.collapse();
+				n.on('expand', this.loadExtension.createDelegate(this, ["core", n, data.archive.core]), this, {single: true, delay: 500});
+				n.expand();
+			}
 		}
 
 	,	getFieldsterminate: function(data){
