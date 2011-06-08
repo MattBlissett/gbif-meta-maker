@@ -24,8 +24,8 @@ GBIF.MetaMaker.LoadWindow = function(config){
 				,	ref: 'txtLoadFile'
 				,	allowBlank: false
 				,	scope: this
-				,	height: 248
-				,	width: 483	
+				,	height: 245
+				,	width: 483
 			}]
 		,	buttonAlign: 'right'		
 		,	buttons: [{
@@ -37,7 +37,7 @@ GBIF.MetaMaker.LoadWindow = function(config){
 					text: 'Cancel'
 				,	scope: this
 				,	handler: function(){
-							this.close();
+						this.close();
 					}	
 			}]
 	});

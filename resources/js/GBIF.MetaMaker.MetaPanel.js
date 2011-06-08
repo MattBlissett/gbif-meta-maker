@@ -68,13 +68,13 @@ GBIF.MetaMaker.MetaPanel = function(config){
 				,			'<tpl if="xindex &gt; 0">'
 				,				'<tpl if="term != \'Spacer\'">'
 
-				,				'<tpl if="term == \'ID\' && rIndex != 0">'
+				,				'<tpl if="term == \'ID\'">'
 				,					'\t\t&lt;id index="{rIndex}"/&gt;\r\n'
 				,				'</tpl>'
 
 				,				'<tpl if="term != \'ID\'">'
 				,					'\t\t&lt;field'
-				,						'<tpl if="rIndex != -1 && rIndex != 0">'
+				,						'<tpl if="rIndex != -1">'
 				,							' index="{rIndex}"'
 				,						'</tpl>'
 				,						'<tpl if="rIndex == -1 || static != \'\'">'

@@ -25,8 +25,7 @@ GBIF.MetaMaker.Center = function(config){
 				 	}	
 			}]
 		,	listeners: {
-					dblclick: this.loadExtension		
-				,	checkchange: this.checkchange
+					checkchange: this.checkchange
 				,	click: this.activateTab
 				,	beforeexpandnode: this.checkDisabled
 				,	scope: this
@@ -69,9 +68,7 @@ GBIF.MetaMaker.Center = function(config){
 
 Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 	
-		loadExtension: function( node ) {}
-	
-	,	resetCoreExtension: function(type) {
+		resetCoreExtension: function(type) {
 			// clears the filename, resets the radio to CSV and properties, then unchecks the extension selected
 			this.extensionsTree.getRootNode().cascade(function(node) {							 
 				if (node.attributes.type == type && node.getUI().isChecked()) {
@@ -126,8 +123,11 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 			var maxIndex = 0;
 			var tNode = null;
 			var rec = null;
-			var tStore = null;
-			this.metaMakerCenterTab.getComponent(type + "-" + node.id).extension.filename.setValue(e.files.location);
+			var tStore = this.metaMakerCenterTab.getComponent(type + "-" + node.id).extension.store;
+			if (!Ext.isObject(e.files.location)) {
+				this.metaMakerCenterTab.getComponent(type + "-" + node.id).extension.filename.setValue(e.files.location);
+			}
+
 			// Loop for defaults and get highest index
 			Ext.each(e.field, function(field) {
 				if (Ext.isEmpty(field.index)) {
@@ -137,12 +137,11 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 							tNode.getUI().toggleCheck(true);
 						}
 					}
-					tStore = this.metaMakerCenterTab.getComponent(type + "-" + node.id).extension.store;
-					rec = tStore.getAt(tStore.find("qualName", field.term));
+					rec = tStore.getAt(tStore.findExact("qualName", field.term));
 					if (!Ext.isEmpty(rec)) {
 						rec.set("global", true);
-						if (!Ext.isEmpty(field.vocabulary)) rec.set("vocabulary", field.vocabulary);
-						if (!Ext.isEmpty(field.default_)) rec.set("static", field.default_);
+						if (Ext.isEmpty(field.vocabulary) != true && Ext.isObject(field.vocabulary) != true) rec.set("vocabulary", field.vocabulary);
+						if (Ext.isEmpty(field.default_) != true && Ext.isObject(field.default_) != true) rec.set("static", field.default_);
 						rec.commit();						
 					}
 				} else {
@@ -150,36 +149,62 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 				}
 			}, this);
 			this.metaMakerCenterTab.getComponent(type + "-" + node.id).extension.reindex();
+
+			// Loop and check items in order adding spacers along the way.
 			for(var i=0;i<=maxIndex;i++) {
 				tField = this.findField(i,e.field);
 				if (Ext.isEmpty(tField)) {
-					// Add Spacer
-					this.metaMakerCenterTab.getComponent(type + "-" + node.id).extension.addSpacer();
+					if ((e.id && e.id.index != i) || (e.coreid && e.coreid.index != i)) {
+						// Add Spacer
+						this.metaMakerCenterTab.getComponent(type + "-" + node.id).extension.addSpacer();
+					} else {
+						// Move ID to this location.
+						var index = tStore.findExact("term", "ID");
+						if (index == -1) {
+							index = tStore.findExact("term", "Core ID");
+							if (index != -1) {
+								rec = tStore.getAt(index);
+								tStore.removeAt(index);
+								tStore.add(rec);
+							}
+						}
+					}
 				} else {
 					tNode = node.findChild("qualName", tField.term, true);
 					if (!Ext.isEmpty(tNode)) {
 						if (!tNode.getUI().isChecked()) {
 							tNode.getUI().toggleCheck(true);
+						} else {
+							// Already checked so should be as a constant so we need to pop and push it back on the store.
+							var index = tStore.findExact("qualName", tField.term);
+							rec = tStore.getAt(index);
+							tStore.removeAt(index);
+							tStore.add(rec);
 						}
 					}
 					tStore = this.metaMakerCenterTab.getComponent(type + "-" + node.id).extension.store;
-					rec = tStore.getAt(tStore.find("qualName", tField.term));
+					rec = tStore.getAt(tStore.findExact("qualName", tField.term));
 					if (!Ext.isEmpty(rec)) {
-//console.log("r", tField);						
-						if (!Ext.isEmpty(tField.vocabulary)) rec.set("vocabulary", tField.vocabulary);
-						if (!Ext.isEmpty(tField.default_)) rec.set("static", tField.default_);
+						if (Ext.isEmpty(tField.vocabulary) != true && Ext.isObject(tField.vocabulary) != true) rec.set("vocabulary", tField.vocabulary);
+						if (Ext.isEmpty(tField.default_) != true && Ext.isObject(tField.default_) != true) rec.set("static", tField.default_);
 						rec.commit();						
 					}					
 				}
 			}
 			this.metaMakerCenterTab.getComponent(type + "-" + node.id).extension.reindex();
-			// Loop for 0 to index
+			this.metaMakerCenterTab.getComponent(type + "-" + node.id).fileSettings.fileSettingOptions.getComponent('radio-custom').setValue(true);
+			this.metaMakerCenterTab.getComponent(type + "-" + node.id).fileSettings.prop.setCustom({
+					'Field Delimiter': this.getFieldsterminate(e.fieldsterminatedby)
+				,	'Fields enclosed by': this.getFieldsenclosed(e.fieldsenclosedby)
+				,	'File Encoding': e.encoding
+				,	'Ignore header row': (e.ignoreheaderlines == 1) ? true : false
+				,	'Line ending': this.getFieldsterminate(e.linesterminatedby)
+			});
 		}
 
 	,	loadXML: function(data) {
 			this.resetAssistant(); // Clears the form.
 			if (data.archive.metadata) this.metaMakerCenterTab.metaPanel.filename.setValue(data.archive.metadata);
-//console.log(data.archive);			
 			Ext.each(data.archive.extension, function(e) {
 				var n = this.extensionsTree.getRootNode().findChild("identifier", e.rowtype, true);
 				if (!Ext.isEmpty(n)) {
@@ -189,7 +214,7 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 				}
 			}, this);
 			
-			// Core						
+			// Core			
 			var n = this.extensionsTree.getRootNode().findChild("identifier", data.archive.core.rowtype, true);
 			if (!Ext.isEmpty(n)) {
 				n.collapse();
@@ -222,6 +247,7 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 			}
 			return fieldsterminatedby;
 		}
+
 	,	checkCustom: function(mnTpl){
 			if(mnTpl['File Encoding'] == 'UTF-8' && mnTpl['Line ending']=='\\r\\n' && mnTpl['Ignore header row']== true){
 				if(mnTpl['Field Delimiter'] == ',' && mnTpl['Fields enclosed by'] == '\"')
@@ -232,7 +258,8 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 			}else if(!Ext.isDefined(mnTpl)){
 				return 'custom';
 			}else return 'custom';
-		}		
+		}
+
 	,	getFieldsenclosed: function(data){
 			var fieldsenclosedby = '';
 			switch(data){
@@ -361,7 +388,7 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 								, node.attributes.relation
 							]], true );	
 					} else {
-						var index = tmpTab.extension.store.find("term", node.attributes.term);
+						var index = tmpTab.extension.store.findExact("term", node.attributes.term);
 						if (index >= 0 ) {
 							tmpTab.extension.store.remove( tmpTab.extension.store.getAt( index ) );
 						}

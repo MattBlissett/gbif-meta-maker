@@ -62,6 +62,30 @@ GBIF.MetaMaker.Properties = function(config){
 		,	selectOnFocus: true
  });
 
+	this.defaultCSV = {
+			'File Encoding': 'UTF-8'
+		,	'Field Delimiter': ','
+		,	'Fields enclosed by': '\"'
+		,	'Line ending': '\\r\\n'
+		,	'Ignore header row': true
+	}
+	
+	this.defaultTab = {
+			'File Encoding': 'UTF-8'
+		,	'Field Delimiter': '\\t'
+		,	'Fields enclosed by': ''
+		,	'Line ending': '\\r\\n'
+		,	'Ignore header row': true
+	}
+	
+	this.defaultCustom = {
+			'File Encoding': 'UTF-8'
+		,	'Field Delimiter': ''
+		,	'Fields enclosed by': ''
+		,	'Line ending': ''
+		,	'Ignore header row': true
+	}
+
 	Ext.apply(this, config, {
 			source: {
 					'File Encoding': 'UTF-8'
@@ -96,43 +120,20 @@ GBIF.MetaMaker.Properties = function(config){
 Ext.extend(GBIF.MetaMaker.Properties, Ext.grid.PropertyGrid, {
 
 		setCSV: function() {
-				
-			this.setSource({
-					'File Encoding': 'UTF-8'
-				,	'Field Delimiter': ','
-				,	'Fields enclosed by': '\"'
-				,	'Line ending': '\\r\\n'
-				,	'Ignore header row': true
-			});
-			
+			this.setSource( this.defaultCSV );			
 //			this.editable = false;
 			this.editable = true;
 		}
 
 	,	setTAB: function() {
-			this.setSource({
-					'File Encoding': 'UTF-8'
-				,	'Field Delimiter': '\\t'
-				,	'Fields enclosed by': ''
-				,	'Line ending': '\\r\\n'
-				,	'Ignore header row': true
-			});
-
+			this.setSource( this.defaultTab );
 //			this.editable = false;
 			this.editable = true;
 		}
 
-	,	setCustom: function() {
-			this.setSource({
-					'File Encoding': 'UTF-8'
-				,	'Field Delimiter': ''
-				,	'Fields enclosed by': ''
-				,	'Line ending': ''
-				,	'Ignore header row': true
-			});
-
+	,	setCustom: function( values ) {			
+			this.setSource( values || this.defaultCustom );
 			this.editable = true;
 		}
-
 
 });
