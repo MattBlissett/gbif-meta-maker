@@ -1,10 +1,10 @@
-Ext.namespace('GBIF');
+ï»¿Ext.namespace('GBIF');
 Ext.namespace('GBIF.MetaMaker');
 
 if (GBIF.MetaMaker.CenterTab) {
 	Ext.apply(GBIF.MetaMaker.CenterTab.prototype, {
 			aboutTitle: 'Ayuda'
-		,	taxonTitle: 'Taxón'
+		,	taxonTitle: 'TaxÃ³n'
 		,	OccurrencesTitle: 'Ocurrencias'
 	});
 }
@@ -13,7 +13,7 @@ if (GBIF.MetaMaker.Center) {
 			txtResetAssistant: 'Restablecer Asistente'
 		,	txtSortFields: 'Los campos tipo'	
 		,	msgConfirmTitle: 'Confirmar'
-		,	msgResetAssistant: '¿Está usted seguro de restablecer asistente?'
+		,	msgResetAssistant: 'Â¿EstÃ¡ usted seguro de restablecer asistente?'
 	});
 }
 
@@ -25,8 +25,8 @@ if (GBIF.MetaMaker.Details) {
 
 if (GBIF.MetaMaker.Extension) {
 	Ext.apply(GBIF.MetaMaker.Extension.prototype, {
-			txtEmptyFileName: '{el nombre del archivo aquí} Ejemplo: myfile.csv'
-		,	txtAddSpacer: 'Añadir Spacer'
+			txtEmptyFileName: '{el nombre del archivo aquÃ­} Ejemplo: myfile.csv'
+		,	txtAddSpacer: 'AÃ±adir Spacer'
 		,	txtRemoveSpacer: 'Retire el espaciador'
 		,	txtFileName: "Nombre del fichero:"
 		,	columnTerm: 'Plazo'
