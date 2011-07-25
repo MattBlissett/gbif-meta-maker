@@ -11,7 +11,7 @@ Sorter = function(n1, n2){
 	}
 	return 0;
 };
-		
+	
 Ext.onReady(function() {
 
 	// Disable browser right click
@@ -25,7 +25,10 @@ Ext.onReady(function() {
 		var params = Ext.urlDecode(location.search.substring(1));
 		return param ? params[param] : params;	
 	}; 
-
+	lang = Ext.getUrlParam('lang');
+	if(!lang){
+		lang = 'en';
+	};
 	this.header = {
 			height: 95
 		,	cls: 'glossary-header'		

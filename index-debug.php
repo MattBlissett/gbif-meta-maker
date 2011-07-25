@@ -36,6 +36,7 @@
 	
 	<script type="text/javascript" src="resources/js/Ext.ux.datatip.js"></script>
 	<script type="text/javascript" src="resources/js/Ext.ux.dd.GridDragDropRowOrder.js"></script>
+	<script type="text/javascript" src="resources/js/GBIF.MetaMaker.Language.js"></script>
 	<script type="text/javascript" src="resources/js/GBIF.MetaMaker.Properties.js"></script>
 	<script type="text/javascript" src="resources/js/GBIF.MetaMaker.FileSettings.js"></script>
 	<script type="text/javascript" src="resources/js/GBIF.MetaMaker.Extension.js"></script>
@@ -46,5 +47,15 @@
 	<script type="text/javascript" src="resources/js/GBIF.MetaMaker.ExtensionsTree.js"></script>
 	<script type="text/javascript" src="resources/js/GBIF.MetaMaker.Details.js"></script>
 	<script type="text/javascript" src="resources/js/GBIF.MetaMaker.app.js"></script>
+	
+	<?php
+	if (isset($_REQUEST['lang'])) {
+		print '<script type="text/javascript" src="resources/languages/GBIF.MetaMaker.language.' . $_REQUEST['lang'] . '.js"></script>';
+		print '<script type="text/javascript" src="resources/locale/ext-lang-' . $_REQUEST['lang'] . '.js"></script>';
+	} else {
+		print '<script type="text/javascript" src="resources/languages/GBIF.MetaMaker.language.en.js"></script>';
+		print '<script type="text/javascript" src="resources/locale/ext-lang-en.js"></script>';
+	}
+  ?>
 </body>
 </html>

@@ -9,7 +9,7 @@ GBIF.MetaMaker.MetaPanel = function(config){
 
 	this.filename = new Ext.form.TextField({
 			width: 250
-		,	emptyText: "dataset metadata document, e.g.  eml.xml"
+		,	emptyText: this.txtEmptyMetaData
 		,	listeners: {
 					valid: this.generateXML
 				,	scope: this
@@ -19,36 +19,35 @@ GBIF.MetaMaker.MetaPanel = function(config){
 			height: 200
 		,	type: 'meta'
 		,	id: 'meta'
-		,	title: 'meta.xml'
 		,	skip: true
 		,	iconCls: 'iconPageWhiteCode'
 		,	padding: 10
 		,	autoScroll: true
 		,	border: false
 		,	tbar: [{
-					text: "Save File"
+					text: this.txtSaveFile
 				,	scope: this
 				,	iconCls: 'iconSave'
-				, handler: function() {
+				, 	handler: function() {
 						window.location = "resources/api/savefile.php?data=" + encodeURIComponent(this.body.dom.textContent);
 				 	}
 			},{
-					text: "Load File"
+					text: this.txtLoadFile
 				,	scope: this
 				,	iconCls: 'iconLoad'
-				, handler: function() {
+				, 	handler: function() {
 						this.loadXml = new GBIF.MetaMaker.LoadWindow();
 						this.loadXml.show();
 						this.loadXml.refBtnLoad.on('click', this.loadFile, this);						
 				 	}
 			}, ' ', {
-					text: "Validate"
+					text: this.txtValidate
 				,	scope: this
 				,	iconCls: 'iconValidate'
 				, 	handler: function() {
 						window.open("http://tools.gbif.org/dwca-validator/validate.do?meta=" + encodeURIComponent(this.body.dom.textContent),'_blank');
 				 	}
-			}, "->", "Metadata file describing dataset:"
+			}, "->", this.txtMetaDataset
 				, this.filename
 			]
 		,	tpl: new Ext.XTemplate(

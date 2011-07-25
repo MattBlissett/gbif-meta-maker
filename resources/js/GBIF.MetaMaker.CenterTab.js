@@ -5,15 +5,15 @@ GBIF.MetaMaker.CenterTab = function(config){
 
 	this.metaPanel = new GBIF.MetaMaker.MetaPanel();
 	this.aboutPanel = new Ext.Panel({
-			title: 'Help'
-		,	autoLoad: 'resources/docs/about.html'
+			title: this.aboutTitle
+		,	autoLoad: 'resources/docs/about-'+ lang +'.html'
 		,	padding: 10
 		,	bodyStyle: 'font-size: 12px'
 		,	autoScroll: true
 	});
 	this.coreSpecimensPanel = new GBIF.MetaMaker.ExtensionPanel({
 			id: 'core-taxon'
-		,	title: 'Taxon'
+		,	title: this.taxonTitle
 		,	type: 'core'
 		,	skip: false
 		,	identifier: 'http://rs.tdwg.org/dwc/terms/Taxon'
@@ -21,7 +21,7 @@ GBIF.MetaMaker.CenterTab = function(config){
 
 	this.coreObservationsPanel = new GBIF.MetaMaker.ExtensionPanel({
 			id: 'core-occurrence'
-		,	title: 'Occurrences'
+		,	title: this.OccurrencesTitle
 		,	type: 'core'
 		,	skip: true
 		,	identifier: 'http://rs.tdwg.org/dwc/terms/Occurrence'

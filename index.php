@@ -34,6 +34,17 @@
    var pageTracker = _gat._getTracker("UA-18593842-1");
    pageTracker._initData();
    pageTracker._trackPageview();
-  </script>  
+  </script>
+  
+  <?php
+	if (isset($_REQUEST['lang'])) {
+		print '<script type="text/javascript" src="resources/languages/GBIF.MetaMaker.language.' . $_REQUEST['lang'] . '.js"></script>';
+		print '<script type="text/javascript" src="resources/locale/ext-lang-' . $_REQUEST['lang'] . '.js"></script>';
+	} else {
+		print '<script type="text/javascript" src="resources/languages/GBIF.MetaMaker.language.en.js"></script>';
+		print '<script type="text/javascript" src="resources/locale/ext-lang-en.js"></script>';
+	}
+  ?>
+  
 </body>
 </html>

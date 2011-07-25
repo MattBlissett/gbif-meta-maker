@@ -17,6 +17,7 @@
     <include name="resources\js\xml2json.js" />
     <include name="resources\js\Ext.ux.datatip.js" />
     <include name="resources\js\Ext.ux.dd.GridDragDropRowOrder.js" />
+    <include name="resources\js\GBIF.MetaMaker.Language.js" />
     <include name="resources\js\GBIF.MetaMaker.Center.js" />
     <include name="resources\js\GBIF.MetaMaker.CenterTab.js" />
     <include name="resources\js\GBIF.MetaMaker.Details.js" />
@@ -32,4 +33,5 @@
   <file name="resources\js\Ext.ux.datatip.js" path="" />
   <file name="resources\js\GBIF.MetaMaker.LoadFile.js" path="" />
   <file name="resources\js\xml2json.js" path="" />
+  <file name="resources\js\GBIF.MetaMaker.Language.js" path="" />
 </project>

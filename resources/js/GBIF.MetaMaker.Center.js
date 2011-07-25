@@ -11,13 +11,30 @@ GBIF.MetaMaker.Center = function(config){
 		,	minWidth: 270
 		,	maxWidth: 270
 		,	split: true
-		,	tbar: [
-				'->', {
-					text: 'Reset Assistant'
+		,	tbar: [{
+						xtype: 'combo'   
+					,	store: language
+					,	mode: 'local'
+					,	value: lang
+					,	displayField: 'value'
+					,	valueField: 'id'
+					,	typeAhead: false
+					,	triggerAction: 'all'
+					,	editable: false
+					,	width: 80
+					,	listeners: {
+							select: function(f, r, i){
+								var lang = r.data.id;
+								window.location ='?lang=' + lang;
+							}
+						}
+				}
+				,	'->', {
+					text: this.txtResetAssistant
 				,	scope: this
 				,	iconCls: 'iconReset'
-				, handler: function() {
-						Ext.Msg.confirm("Confirm", "Are you sure reset assistant?", function(btn){
+				, 	handler: function() {
+						Ext.Msg.confirm(this.msgConfirmTitle, this.msgResetAssistant, function(btn){
 							if(btn == 'yes'){
 								this.resetAssistant();
 							}
@@ -34,10 +51,10 @@ GBIF.MetaMaker.Center = function(config){
 						if (node.attributes.type == 'core' || node.attributes.type == 'extension') {
 							var menu = new Ext.menu.Menu();            
 							menu.add(new Ext.menu.Item({
-									text: 'Sort Fields'
-								,	scope: node
-								, handler: function() {
-										this.sort(Sorter);
+									text: this.txtSortFields
+								,	scope: this
+								, 	handler: function() {
+										node.sort(Sorter);
 									}
 							}));
 							menu.show(node.ui.getAnchor());

@@ -4,21 +4,14 @@ GBIF.MetaMaker.LoadWindow = function(config){
 	Ext.apply(this, config, {
 			width: 500
 		,	height: 350
-		,	title: 'Load File'
 		,	modal: true
 		,	resizable: false
-/*		
-		,	defaults: {
-					padding: 5
-				,	border: false
-			}
-*/			
 		,	plain: true
 		,	closable: true
 		,	currentXml: ''
 		,	items: [{
 					xtype: 'displayfield'
-				,	value: '<div style="padding: 10px;">Please paste your meta.xml text into the area below and click "Load".</div>'	
+				,	value: '<div style="padding: 10px;">' + this.txtLoadInstruction + '</div>'	
 			},{
 					xtype: 'textarea'
 				,	ref: 'txtLoadFile'
@@ -29,12 +22,12 @@ GBIF.MetaMaker.LoadWindow = function(config){
 			}]
 		,	buttonAlign: 'right'		
 		,	buttons: [{
-					text: 'Load'
+					text: this.btnLoad
 				,	scope: this
 				,	ref: '../refBtnLoad'
 			//	,	handler: this.loadFile
 			}, {
-					text: 'Cancel'
+					text: this.btnCancel
 				,	scope: this
 				,	handler: function(){
 						this.close();
