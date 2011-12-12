@@ -26,6 +26,8 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 								,	title: 'Taxon'
 								,	url: 'http://rs.gbif.org/core/dwc_taxon.xml'
 								,	identifier: 'http://rs.tdwg.org/dwc/terms/Taxon'
+								,	subject: ''
+								,	description: ''
 							}, {
 									text: 'Occurrences'
 								,	id: 'occurrence'
@@ -35,6 +37,8 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 								,	title: 'Occurrences'
 								,	identifier: 'http://rs.tdwg.org/dwc/terms/Occurrence'
 								,	url: 'http://rs.gbif.org/core/dwc_occurrence.xml'
+								,	subject: ''
+								,	description: ''
 							}]
 					}, {
 							text: 'Extensions'

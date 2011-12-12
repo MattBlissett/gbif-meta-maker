@@ -37,12 +37,16 @@ GBIF.MetaMaker.Extension = function(config){
 	Ext.apply(this, config, {
 			store: store
 		,	columns: [
-      		{header: '&nbsp;', width: 25, sortable: false, dataIndex: '', renderer: this.renderReorder}
-      	,	{header: '&nbsp;', width: 25, sortable: false, dataIndex: 'rIndex', renderer: this.renderIndex, scope: this, tooltip: 'Related column index based on your file.'}
+      		{header: '&nbsp;', width: 30, sortable: false, dataIndex: '', renderer: this.renderReorder}
+      	,	{header: '&nbsp;', width: 30, sortable: false, dataIndex: 'rIndex', renderer: this.renderIndex, scope: this, tooltip: 'Related column index based on your file.'}
       	,	{header: this.columnTerm, width: 140, sortable: false, dataIndex: 'term'}
 				,	{header: this.columnRequired, width: 60, sortable: false, dataIndex: 'required', renderer: this.renderCheckbox}
 				,	{header: this.columnDefaultValue, width: 200,	dataIndex: 'static', editor: new Ext.form.TextField(), tooltip: 'Click row cell to add default value.' }
-				,	{header: this.columnGlobal, width: 44,	dataIndex: 'global', editor: new Ext.form.Checkbox(), tooltip: 'Check row cell to provide default without column index.', renderer: this.renderCheckbox }
+				
+				,	{ xtype: 'globalcheckcolumn', header: this.columnGlobal,	width: 44,	dataIndex: 'global', tooltip: 'Check row cell to provide default without column index.' }
+//				,	{ xtype: 'booleancolumn', header: this.columnGlobal,	editor: { xtype: 'checkbox'}, width: 44,	dataIndex: 'global2', tooltip: 'Check row cell to provide default without column index.' }
+//				,	{header: this.columnGlobal, width: 44,	dataIndex: 'global', editor: new Ext.form.Checkbox(), tooltip: 'Check row cell to provide default without column index.', renderer: this.renderCheckbox }
+//				,	{header: this.columnGlobal, width: 44,	dataIndex: 'global', editor: new Ext.form.Checkbox(), tooltip: 'Check row cell to provide default without column index.' }
 				,	{header: this.columnVocabulary, width: 200,	dataIndex: 'vocabulary', editor: new Ext.form.TextField(), tooltip: 'Click row cell to add default value.<br><br>A URI that identifies a vocabulary used for the values found for the field in the source files. The URI ideally should resolve to some machine readable definition like SKOS, RDF, the GBIF vocabulary schema or a simple text file as often found for ISO or RFC standards. E.g. http://rs.gbif.org/vocabulary/gbif/nomenclatural_code.xml;<br>http://www.ietf.org/rfc/rfc3066.txt;<br>http://www.iso.org/iso/list-en1-semic-3.txt'}
 			]
 		,	stripeRows: true
@@ -71,7 +75,7 @@ GBIF.MetaMaker.Extension = function(config){
 					
 					var ddrow = new Ext.ux.dd.GridReorderDropTarget(g, {
 							copy: false
-							,listeners: {
+						,	listeners: {
 									beforerowmove: function(objThis, oldIndex, newIndex, records) {
 											// code goes here
 											// return false to cancel the move
@@ -167,7 +171,7 @@ Ext.extend(GBIF.MetaMaker.Extension, Ext.grid.EditorGridPanel, {
 				}
 			});
 			
-			this.getView().refresh();
+			this.getView().refresh();			
 		}
 		
 	,	rightClickMenu: function(grid, row, e){

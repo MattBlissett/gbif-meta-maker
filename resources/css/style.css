@@ -246,3 +246,7 @@ a:active {
 .row-spacer {
 	background-color: #FFC;
 }
+
+.x-grid-dirty-cell {
+	background-image:none !important;
+}
