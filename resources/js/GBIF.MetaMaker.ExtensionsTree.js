@@ -120,7 +120,7 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 			}
 			var extensions = this.getNodeById('extensions');
 			extensions.eachChild(function(record) {
-				var found = record.attributes.subject.search(eval("/" + activeCore + "/i"));
+				var found = (record.attributes.subject ? record.attributes.subject.search(eval("/" + activeCore + "/i")) : -1);
 				if (found == -1) {
 					record.disable();
 					if (record.getUI().isChecked()) {
@@ -158,7 +158,7 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 					callback(this, node);
 				}
 			} catch (e) {
-				alert('Error', "Load Exception Please Try Again.");
+				(console.error || console.log).call(console, e.stack || e);
 			}
 		}
 

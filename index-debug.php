@@ -27,11 +27,11 @@
 	<script type="text/javascript" src="http://extjs.cachefly.net/ext-3.4.0/adapter/ext/ext-base.js"></script>
 	<script type="text/javascript" src="http://extjs.cachefly.net/ext-3.4.0/ext-all-debug.js"></script>
 	<script type="text/javascript" src="resources/js/CheckColumn.js"></script>    
-	<script type="text/javascript" src="resources/js/MetaMakerNorth.js"></script>
+	<!--script type="text/javascript" src="resources/js/MetaMakerNorth.js"></script>
 	<script type="text/javascript" src="resources/js/VernacularNames.js"></script>
 	<script type="text/javascript" src="resources/js/MetaTab.js"></script>
 	<script type="text/javascript" src="resources/js/EditorGridTab.js"></script>
-	<script type="text/javascript" src="resources/js/MetaSources.js"></script>
+	<script type="text/javascript" src="resources/js/MetaSources.js"></script-->
 	<script type="text/javascript" src="resources/js/GBIF.MetaMaker.CenterTab.js"></script>
 
 	
