@@ -24,7 +24,7 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 								,	checked: true
 								,	type: 'core'
 								,	title: 'Taxon'
-								,	url: 'http://rs.gbif.org/core/dwc_taxon.xml'
+								,	url: 'http://rs.gbif.org/core/dwc_taxon_2015-04-24.xml'
 								,	identifier: 'http://rs.tdwg.org/dwc/terms/Taxon'
 								,	subject: ''
 								,	description: ''
@@ -36,7 +36,7 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 								,	type: 'core'
 								,	title: 'Occurrences'
 								,	identifier: 'http://rs.tdwg.org/dwc/terms/Occurrence'
-								,	url: 'http://rs.gbif.org/core/dwc_occurrence.xml'
+								,	url: 'http://rs.gbif.org/core/dwc_occurrence_2015-07-02.xml'
 								,	subject: ''
 								,	description: ''
 							}]
@@ -148,7 +148,7 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 					n.attributes.type = 'extension';
 					n.attributes.checked = false;
 					n.iconCls = 'iconText';
-					if (n) {
+					if (n && n.attributes.isLatest) {
 						node.appendChild(n);
 					}
 				}
