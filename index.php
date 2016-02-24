@@ -26,16 +26,15 @@
 	<script type="text/javascript" src="http://extjs.cachefly.net/ext-3.4.0/adapter/ext/ext-base.js"></script>
 	<script type="text/javascript" src="http://extjs.cachefly.net/ext-3.4.0/ext-all.js"></script>
 	<script type="text/javascript" src="resources/js/GBIF.MetaMaker.MetaMaker.js"></script>
-	<script type="text/javascript">
-   var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-   document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-  </script>
-  <script type="text/javascript">
-   var pageTracker = _gat._getTracker("UA-18593842-1");
-   pageTracker._initData();
-   pageTracker._trackPageview();
-  </script>
-  
+	<script>
+                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+                ga('create', 'UA-18593842-1', 'auto');
+                ga('send', 'pageview');
+	</script>
+
   <?php
 	if (isset($_REQUEST['lang'])) {
 		print '<script type="text/javascript" src="resources/languages/GBIF.MetaMaker.language.' . $_REQUEST['lang'] . '.js"></script>';
