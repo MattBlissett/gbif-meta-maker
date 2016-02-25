@@ -8,7 +8,7 @@ GBIF.MetaMaker.Extension = function(config){
 					{name: 'term'}
 				,	{name: 'dataType'}
 				,	{name: 'required'}
-				,	{name: 'static'}
+				,	{name: 'sstatic'}
 				,	{name: 'description'}
 				,	{name: 'qualName'}
 				,	{name: 'namespace'}
@@ -41,7 +41,7 @@ GBIF.MetaMaker.Extension = function(config){
       	,	{header: '&nbsp;', width: 30, sortable: false, dataIndex: 'rIndex', renderer: this.renderIndex, scope: this, tooltip: 'Related column index based on your file.'}
       	,	{header: this.columnTerm, width: 140, sortable: false, dataIndex: 'term'}
 				,	{header: this.columnRequired, width: 60, sortable: false, dataIndex: 'required', renderer: this.renderCheckbox}
-				,	{header: this.columnDefaultValue, width: 200,	dataIndex: 'static', editor: new Ext.form.TextField(), tooltip: 'Click row cell to add default value.' }
+				,	{header: this.columnDefaultValue, width: 200,	dataIndex: 'sstatic', editor: new Ext.form.TextField(), tooltip: 'Click row cell to add default value.' }
 				
 				,	{ xtype: 'globalcheckcolumn', header: this.columnGlobal,	width: 44,	dataIndex: 'global', tooltip: 'Check row cell to provide default without column index.' }
 //				,	{ xtype: 'booleancolumn', header: this.columnGlobal,	editor: { xtype: 'checkbox'}, width: 44,	dataIndex: 'global2', tooltip: 'Check row cell to provide default without column index.' }

@@ -81,7 +81,7 @@ GBIF.MetaMaker.Center = function(config){
 
 	GBIF.MetaMaker.Center.superclass.constructor.call(this, config);
 
-}	
+}
 
 Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 	
@@ -98,7 +98,7 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 						} else {
 							rec.set("global", false);
 							rec.set("vocabulary", "");
-							rec.set("static", "");
+							rec.set("sstatic", "");
 							rec.commit();
 						}
 					}, this.metaMakerCenterTab.getComponent(type + "-" + node.id).extension.store);
@@ -158,7 +158,7 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 					if (!Ext.isEmpty(rec)) {
 						rec.set("global", true);
 						if (Ext.isEmpty(field.vocabulary) != true && Ext.isObject(field.vocabulary) != true) rec.set("vocabulary", field.vocabulary);
-						if (Ext.isEmpty(field.default_) != true && Ext.isObject(field.default_) != true) rec.set("static", field.default_);
+						if (Ext.isEmpty(field.default_) != true && Ext.isObject(field.default_) != true) rec.set("sstatic", field.default_);
 						rec.commit();						
 					}
 				} else {
@@ -203,7 +203,7 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 					rec = tStore.getAt(tStore.findExact("qualName", tField.term));
 					if (!Ext.isEmpty(rec)) {
 						if (Ext.isEmpty(tField.vocabulary) != true && Ext.isObject(tField.vocabulary) != true) rec.set("vocabulary", tField.vocabulary);
-						if (Ext.isEmpty(tField.default_) != true && Ext.isObject(tField.default_) != true) rec.set("static", tField.default_);
+						if (Ext.isEmpty(tField.default_) != true && Ext.isObject(tField.default_) != true) rec.set("sstatic", tField.default_);
 						rec.commit();						
 					}					
 				}
@@ -398,7 +398,7 @@ Ext.extend(GBIF.MetaMaker.Center,Ext.Panel,  {
 									node.attributes.term
 								, node.attributes.dataType
 								, node.attributes.required							
-								, node.attributes.static							
+								, node.attributes.sstatic
 								, node.attributes.description							
 								, node.attributes.qualName					
 								, node.attributes.namespace

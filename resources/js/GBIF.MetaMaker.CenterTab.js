@@ -74,7 +74,7 @@ Ext.extend(GBIF.MetaMaker.CenterTab,Ext.TabPanel,  {
 											term: rec.data.term
 										,	dataType: rec.data.dataType
 										,	required: rec.data.required
-										,	static: rec.data.static
+										,	sstatic: rec.data.sstatic
 										,	qualName: rec.data.qualName
 										,	rIndex: rec.data.rIndex
 										,	global: rec.data.global
@@ -111,7 +111,7 @@ Ext.extend(GBIF.MetaMaker.CenterTab,Ext.TabPanel,  {
 											term: rec.data.term
 										,	dataType: rec.data.dataType
 										,	required: rec.data.required
-										,	static: rec.data.static
+										,	sstatic: rec.data.sstatic
 										,	qualName: rec.data.qualName
 										,	rIndex: rec.data.rIndex
 										,	global: rec.data.global
