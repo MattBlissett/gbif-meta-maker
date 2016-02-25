@@ -70,7 +70,8 @@ GBIF.MetaMaker.ExtensionsTree = function(config){
 						+ '</tpl>'
 						+	'<tpl if="type == \'attribute\'">'
 						+ '<b>Description:</b> {description}<br><br><b>Examples:</b> {examples}'
-						+ '</tpl>'
+						+ '</tpl>',
+                                dismissDelay: 0,
 			})		
 		,	loader: new Ext.tree.TreeLoader({
 					dataUrl: 'resources/api/proxy.php?url=http://gbrds.gbif.org/registry/extensions.json&type=json&hide=true'
