@@ -115,12 +115,13 @@ Ext.extend(GBIF.MetaMaker.ExtensionsTree, Ext.tree.TreePanel, {
 		}
 	
 	,	disableExtensions: function(activeCore) {
+			// Enable extensions according to the core.  Extensions are restricted by the subject, a blank/null subject means the extension will never be disabled.
 			if (activeCore == '') {
 				activeCore = "taxon";
 			}
 			var extensions = this.getNodeById('extensions');
 			extensions.eachChild(function(record) {
-				var found = (record.attributes.subject ? record.attributes.subject.search(eval("/" + activeCore + "/i")) : -1);
+				var found = (record.attributes.subject ? (record.attributes.subject.length > 0 ? (record.attributes.subject.search(eval("/" + activeCore + "/i"))) : 0) : 0);
 				if (found == -1) {
 					record.disable();
 					if (record.getUI().isChecked()) {
